@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+name = "Tuna"
+
+[packages]
+feedparser = "==6.0.2"
+flask-jwt-extended = "==4.0.2"
+flask-migrate = "==2.6.0"
+flask-restful = "==0.3.8"
+flask-sqlalchemy = "==2.4.4"
+flask = "==1.1.2"
+gevent = "==21.1.2"
+gunicorn = "==20.0.4"
+pymysql = "==1.0.2"
+flask-apscheduler = "==1.11.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
