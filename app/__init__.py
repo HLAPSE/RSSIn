@@ -11,14 +11,15 @@
 from flask import Flask
 from flask_migrate import Migrate
 
-from app import models, resources, auth, tasks
-
+from app import resources, auth, tasks
+from app.models.model import db, migrate
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
-    db = models.init_app(app)
-    migrate = Migrate(app, db)
+    db.app=app
+    db.init_app(app)
+    migrate.init_app(app, db)
     resources.init_app(app)
     auth.init_app(app)
     tasks.init_app(app)
