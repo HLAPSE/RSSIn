@@ -80,7 +80,7 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=False, nullable=False)
     link = db.Column(db.Text, nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text)
     updateddate = db.Column(db.DateTime,
                             default=datetime.now,
                             onupdate=datetime.now)
