@@ -100,7 +100,10 @@ class Read(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     feed_id = db.Column(db.Integer, db.ForeignKey('feed.id'), nullable=False)
     entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False)
-    note = db.Column(db.Text)
-    category = db.Column(db.String(80), unique=False, nullable=False)
-    notecreatedata = db.Column(db.DateTime, unique=False, nullable=False)
+    # note = db.Column(db.Text)
+    # category = db.Column(db.String(80), unique=False, nullable=False)
+    # notecreatedata = db.Column(db.DateTime, unique=False, nullable=False)
     feed = db.relationship("Feed")
+    def __init__(self, feed_id, entry_id, note=None):
+        self.feed_id = feed_id
+        self.entry_id = entry_id

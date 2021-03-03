@@ -1,6 +1,6 @@
-from app.models.model import Feed
+from app.models.model import Entry, Feed, Read
 from flask import jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from flask_restful import Resource, reqparse
 
 
@@ -35,5 +35,8 @@ class entries(Resource):
                             type=int,
                             required=True,
                             help='feed_id cannot be blank!')
-        
         args = parser.parse_args()
+        entry = Entry.query.get(args["entry_id"])
+        read_record = Read(entry.feed.id, args["entry_id"])
+        current_user.reads.append(read_record)
+        return jsonify({'message': 'success!'})
