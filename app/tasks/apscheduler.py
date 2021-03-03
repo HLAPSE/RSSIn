@@ -1,8 +1,7 @@
-from pkg_resources import get_entry_info
-from app.models.model import Feed, db, Entry
+from app.common.util import formatDatetime
+from app.models.model import Entry, Feed, db
 from feedparser import parse as feed_parse
 from flask_apscheduler import APScheduler
-from app.common.util import formatDatetime
 
 scheduler = APScheduler()
 
@@ -29,13 +28,17 @@ def fresh_entry():
         if str(feed.updateddate) != feed_updated:
             entries = feed_parse(feed.feedURL).entries
             for entry in entries:
-                article = Entry.query.filter_by(link=entry.link).first()
+                article = Entry.query.filter_by(link=entry.link).one_or_none()
                 if article:
                     article_update = formatDatetime(entry.updated_parsed)
                     if article_update != str(article.publisheddate):
                         # 如果文章更新
+                        try:
+                            content = entry.content[0]["value"]
+                        except AttributeError:
+                            content = None
                         article.title = entry.title
-                        article.content = entry.content[0]["value"]
+                        article.content = content
                         article.updateddate = article_update
                         db.session.commit()
                 else:
