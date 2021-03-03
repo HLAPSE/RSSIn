@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask_migrate import Migrate, migrate
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import safe_str_cmp
 from app.common.util import formatDatetime
@@ -103,3 +103,4 @@ class Read(db.Model):
     note = db.Column(db.Text)
     category = db.Column(db.String(80), unique=False, nullable=False)
     notecreatedata = db.Column(db.DateTime, unique=False, nullable=False)
+    feed = db.relationship("Feed")

@@ -4,6 +4,5 @@ from flask_restful import Resource
 
 
 class HelloWorld(Resource):
-    @jwt_required()
     def get(self):
-        return jsonify(user=current_user.name, message="Hello, World!")
+        return jsonify(message="Hello, World!")
