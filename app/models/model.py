@@ -99,12 +99,8 @@ class Read(db.Model):
     #: 笔记ID、用户id、订阅源id、文章id(直接uuid3)、笔记、笔记分类、笔记创建时间
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    feed_id = db.Column(db.Integer, db.ForeignKey('feed.id'), nullable=False)
     entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False)
-    feed = db.relationship("Feed")
-
-    def __init__(self, feed_id, entry_id, note=None):
-        self.feed_id = feed_id
+    def __init__(self, entry_id):
         self.entry_id = entry_id
 
 
