@@ -21,7 +21,7 @@ class User(db.Model):
     createdate = db.Column(db.DateTime, default=datetime.now)
     reads = db.relationship('Read', backref='user', lazy=True)
     folders = db.relationship('Folder', backref='user', lazy=True)
-    note_folders = db.relationship('NoteFolder', backref='user', lazy=True)
+    notefolders = db.relationship('NoteFolder', backref='user', lazy=True)
 
     # NOTE: In a real application make sure to properly hash and salt passwords
     def check_password(self, password):
@@ -116,16 +116,13 @@ class NoteFolder(db.Model):
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
-    notecreatedata = db.Column(db.DateTime, unique=False, nullable=False)
+    notecreatedata = db.Column(db.DateTime, default=datetime.now)
     notefolder_id = db.Column(db.Integer,
                               db.ForeignKey('notefolder.id'),
                               nullable=False)
-    feed_id = db.Column(db.Integer, db.ForeignKey('feed.id'), nullable=False)
     entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False)
-    feed = db.relationship("Feed")
     entry = db.relationship("Entry")
 
-    def __init__(self, feed_id, entry_id, content=None):
-        self.feed_id = feed_id
+    def __init__(self, entry_id, content=None):
         self.entry_id = entry_id
         self.content = content

@@ -1,6 +1,6 @@
-from app.models.model import Entry, Feed, Read,db
+from app.models.model import Feed, Read, db
 from flask import jsonify
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource, reqparse
 
 
@@ -15,7 +15,10 @@ class Entries(Resource):
                             help='feed_id cannot be blank!')
         args = parser.parse_args()
         feed = Feed.query.get(args["feed_id"])
-        read_list = [read.entry_id for read in Read.query.filter_by(user_id=current_user.id)]
+        read_list = [
+            read.entry_id
+            for read in Read.query.filter_by(user_id=current_user.id).all()
+        ]
         entry_list = [entry for entry in feed.entries]
         data = []
         for entry in entry_list:
@@ -38,8 +41,9 @@ class Entries(Resource):
                             required=True,
                             help='feed_id cannot be blank!')
         args = parser.parse_args()
-        entry = Entry.query.get(args["entry_id"])
-        read_record = Read(args["entry_id"])
-        current_user.reads.append(read_record)
-        db.session.commit()
+        if not Read.query.filter_by(user_id=current_user.id,
+                                    entry_id=args["entry_id"]).one_or_none():
+            read_record = Read(args["entry_id"])
+            current_user.reads.append(read_record)
+            db.session.commit()
         return jsonify({'message': 'success!'})

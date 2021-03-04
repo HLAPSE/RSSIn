@@ -1,8 +1,7 @@
-import re
 from flask import jsonify
 from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource, reqparse
-from ..models.model import Folder, db
+from app.models.model import Folder, db
 
 
 class Folders(Resource):
@@ -33,9 +32,9 @@ class Folders(Resource):
     def put(self):
         parser = reqparse.RequestParser()
         parser.add_argument('folder_name', type=str, required=True,
-                            help='subscription_url cannot be blank!')
+                            help='folder_name cannot be blank!')
         parser.add_argument('folder_id', type=int, required=True,
-                            help='subscription_url cannot be blank!')
+                            help='folder_id cannot be blank!')
         args = parser.parse_args()
         if args["folder_name"] not in [folder.name for folder in current_user.folders]:
             folder = Folder.query.get(args["folder_id"])
@@ -43,7 +42,7 @@ class Folders(Resource):
             db.session.commit()
             return jsonify({'message': 'success!'})
         else:
-            return jsonify({'message': 'folder has existed!'})
+            return jsonify({'message': args["folder_name"]+' has existed!'})
     
     @jwt_required()
     def delete(self):
