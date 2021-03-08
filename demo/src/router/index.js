@@ -13,6 +13,16 @@ const routes = [
     name: "About",
     component: () => import("@/views/About.vue"),
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/LoginRegister.vue"),
+  },
+  {
+    path: "/:cacheAll(.*)",
+    name: "404",
+    component: () => import("@/views/404.vue"),
+  },
 ];
 
 const router = createRouter({

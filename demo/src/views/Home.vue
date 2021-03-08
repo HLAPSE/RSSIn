@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <h1>这是首页</h1>
+</template>
 
 <script>
 // @ is an alias to /src
