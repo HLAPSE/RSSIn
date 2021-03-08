@@ -5,8 +5,9 @@ import store from "./store";
 import ElementPlus from "element-plus";
 import "normalize.css/normalize.css";
 import "element-plus/lib/theme-chalk/index.css";
-
+import axios from "./http";
 const app = createApp(App);
+app.config.globalProperties.$axios = axios;
 app.use(store);
 app.use(router);
 app.use(ElementPlus);

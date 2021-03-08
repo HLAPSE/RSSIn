@@ -30,6 +30,7 @@
 
 <script>
 import { ref, getCurrentInstance } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   props: {
@@ -40,12 +41,14 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const { ctx } = getCurrentInstance();
+    const router = useRoute();
     const submitForm = (formName) => {
       ctx.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          ctx.$axios.post("", props.userInfo).then(res);
+          router.push("/");
         } else {
           console.log("error submit!!");
           return false;
