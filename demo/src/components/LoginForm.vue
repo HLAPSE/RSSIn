@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { ref, getCurrentInstance } from "vue";
-import { useRoute } from "vue-router";
+import { getCurrentInstance } from "vue";
+import { ElMessage } from "element-plus";
 
 export default {
   props: {
@@ -43,14 +43,20 @@ export default {
   },
   setup(props) {
     const { ctx } = getCurrentInstance();
-    const router = useRoute();
     const submitForm = (formName) => {
       ctx.$refs[formName].validate((valid) => {
         if (valid) {
-          ctx.$axios.post("", props.userInfo).then(res);
-          router.push("/");
+          ctx.$axios
+            .post("/api/login", props.userInfo)
+            .then((res) => {
+              const { access_token } = res.data;
+              localStorage.setItem("Token", access_token);
+              ctx.$router.push("/");
+            })
+            .catch((error) => {
+              ElMessage.error(error.response.data);
+            });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
