@@ -50,7 +50,7 @@ export default {
             .post("/api/login", props.userInfo)
             .then((res) => {
               const { access_token } = res.data;
-              localStorage.setItem("Token", access_token);
+              localStorage.setItem("Token", "Bearer " + access_token);
               ctx.$router.push("/");
             })
             .catch((error) => {

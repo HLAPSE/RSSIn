@@ -19,7 +19,7 @@
             signup
           </button>
         </div>
-        <img src="@/assets/log.svg" class="image" alt="" />
+        <img src="@/assets/login.svg" class="image" alt="" />
       </div>
       <div class="panel right-panel">
         <div class="content">
