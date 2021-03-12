@@ -1,33 +1,30 @@
 <template>
   <el-container>
     <el-header>
-      <el-row>
-        <el-menu class="el-menu-demo" mode="horizontal" route="true">
-          <el-col :span="4"><el-menu-item>RSSIn</el-menu-item></el-col>
-          <el-col :span="8"><el-menu-item>阅读</el-menu-item></el-col>
-          <el-col :span="8"><el-menu-item>笔记</el-menu-item></el-col>
-          <el-col :span="4">
-            <el-menu-item index="/login">
-              <el-avatar>Hlaspe</el-avatar>
-              <!-- <router-link to="/login">Go to try</router-link> -->
+      <el-menu mode="horizontal">
+        <el-row type="flex">
+          <el-col :span="2"><el-menu-item>RSSIn</el-menu-item></el-col>
+          <el-col :span="3" :offset="7">
+            <el-menu-item icon="el-icon-reading">
+              <i class="el-icon-reading">Reading</i>
             </el-menu-item>
           </el-col>
-        </el-menu>
-      </el-row>
+          <el-col :span="3" :offset="1"
+            ><el-menu-item
+              ><i class="el-icon-collection">Notebook</i></el-menu-item
+            ></el-col
+          >
+          <el-col :span="2" :offset="6">
+            <el-menu-item>
+              <el-avatar icon="el-icon-user-solid"></el-avatar>
+            </el-menu-item>
+          </el-col>
+        </el-row>
+      </el-menu>
     </el-header>
     <el-container>
-      <el-aside width="30%"
-        ><el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-          <el-radio-button :label="false">展开</el-radio-button>
-          <el-radio-button :label="true">收起</el-radio-button>
-        </el-radio-group>
-        <el-menu
-          default-active="1-4-1"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-          :collapse="isCollapse"
-        >
+      <el-aside
+        ><el-menu>
           <el-submenu index="1">
             <template #title>
               <i class="el-icon-location"></i>
@@ -100,22 +97,4 @@ export default {
 };
 </script>
 <style scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
-.el-row {
-  margin-bottom: 20px;
-}
-.el-col {
-  border-radius: 4px;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
 </style>
