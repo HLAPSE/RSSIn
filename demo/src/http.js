@@ -18,6 +18,7 @@ const endLoading = () => {
 // 请求拦截
 axios.interceptors.request.use((config) => {
   startLoading();
+  config.headers.Authorization = localStorage.getItem('Token');
   return config;
 });
 // 相应拦截

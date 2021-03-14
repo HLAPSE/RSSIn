@@ -54,7 +54,7 @@ export default {
               ctx.$router.push("/");
             })
             .catch((error) => {
-              ElMessage.error(error.response.data);
+              ElMessage.error(error.response);
             });
         } else {
           return false;

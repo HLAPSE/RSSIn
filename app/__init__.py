@@ -14,13 +14,15 @@ from flask_migrate import Migrate
 from app import resources, auth, tasks
 from app.models.model import db, migrate
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
-    db.app=app
+    db.app = app
     db.init_app(app)
     migrate.init_app(app, db)
     resources.init_app(app)
     auth.init_app(app)
-    tasks.init_app(app)
+    # 暂时取消定时任务
+    # tasks.init_app(app)
     return app
