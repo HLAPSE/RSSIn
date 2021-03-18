@@ -23,22 +23,12 @@
       </el-menu>
     </el-header>
     <el-container>
-      <el-aside> <AsiderForm /></el-aside>
+      <el-aside>
+        <!-- 这里是订阅文件夹 -->
+        <AsiderForm @feedInfo="feedInfoFun" />
+      </el-aside>
       <el-main>
-        <el-card class="box-card">
-          <div class="card-header">
-            <span>这是一篇文章</span>
-            <el-button class="button" type="text">展开</el-button>
-          </div>
-          <div class="text item">
-            <ul>
-              <li>标题</li>
-              <li>概要</li>
-            </ul>
-          </div>
-        </el-card>
-        <!-- 回到顶部 -->
-        <el-backtop></el-backtop>
+        <Entry :selectFeed="selectFeed" />
       </el-main>
     </el-container>
   </el-container>
@@ -47,14 +37,20 @@
 <script>
 // @ is an alias to /src
 import AsiderForm from "@/components/AsiderForm";
-
+import Entry from "@/components/Entry";
+import { reactive } from "vue";
 export default {
   name: "Home",
-  components: { AsiderForm },
-  data() {
-    return { isCollapse: false };
+  components: { AsiderForm, Entry },
+  setup() {
+    const isCollapse = false;
+    const selectFeed = reactive({ folder_id: 0, feed_id: 1 });
+    const feedInfoFun = (selectInfo) => {
+      selectFeed.folder_id = selectInfo.folder_id;
+      selectFeed.feed_id = selectInfo.feed_id;
+    };
+    return { isCollapse, feedInfoFun, selectFeed };
   },
-  methods: {},
 };
 </script>
 <style scoped>

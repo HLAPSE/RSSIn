@@ -8,7 +8,6 @@ from app.models.model import Feed, Folder, FolderFeed, db
 
 
 class Subscriptions(Resource):
-
     @jwt_required()
     def get(self):
         data = []
@@ -29,11 +28,16 @@ class Subscriptions(Resource):
     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('subscription_url', type=str, required=True,
+        parser.add_argument('subscription_url',
+                            type=str,
+                            required=True,
                             help='subscription_url cannot be blank!')
-        parser.add_argument('folder_id', type=int, required=True,
+        parser.add_argument('folder_id',
+                            type=int,
+                            required=True,
                             help='folder_id cannot be blank!')
-        parser.add_argument('feed_alias', type=str,
+        parser.add_argument('feed_alias',
+                            type=str,
                             help='feed_alias cannot be blank!')
         args = parser.parse_args()
         feed = Feed.query.filter_by(
@@ -43,18 +47,19 @@ class Subscriptions(Resource):
             alias = args["feed_alias"] or d.title
             feed_info = FolderFeed(feed_alias=alias)
             feed_type = link_parse(d.link).netloc
-            feed_info.feed = Feed(d.title, d.subtitle, feed_type,
-                                  d.link, args['subscription_url'])
+            feed_info.feed = Feed(d.title, d.subtitle, feed_type, d.link,
+                                  args['subscription_url'])
             feed_folder = Folder.query.get(args["folder_id"])
             feed_folder.feeds.append(feed_info)
             db.session.commit()
             return jsonify({'message': 'success!'})
-        elif current_user in [folder_info.folder.user for folder_info in feed.folders]:
+        elif current_user in [
+                folder_info.folder.user for folder_info in feed.folders
+        ]:
             print("current_user")
             return jsonify({'message': '已经存在了!'})
         else:
-            feed_info = FolderFeed(
-                feed_alias=args["feed_alias"] or feed.title)
+            feed_info = FolderFeed(feed_alias=args["feed_alias"] or feed.title)
             feed_info.folder = Folder.query.get(args["folder_id"])
             feed_info.feed = feed
             db.session.add(feed_info)
@@ -64,13 +69,19 @@ class Subscriptions(Resource):
     @jwt_required()
     def put(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('feed_id', type=int, required=True,
+        parser.add_argument('feed_id',
+                            type=int,
+                            required=True,
                             help='id cannot be blank!')
-        parser.add_argument('folder_id', type=str, required=True,
+        parser.add_argument('folder_id',
+                            type=str,
+                            required=True,
                             help='folder cannot be blank!')
-        parser.add_argument('feed_alias', type=str,
+        parser.add_argument('feed_alias',
+                            type=str,
                             help='alias cannot be blank!')
-        parser.add_argument('folder_id_dst', type=int,
+        parser.add_argument('folder_id_dst',
+                            type=int,
                             help='alias cannot be blank!')
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))
@@ -84,9 +95,13 @@ class Subscriptions(Resource):
     @jwt_required()
     def delete(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('feed_id', type=int, required=True,
+        parser.add_argument('feed_id',
+                            type=int,
+                            required=True,
                             help='feed_id cannot be blank!')
-        parser.add_argument('folder_id', type=str, required=True,
+        parser.add_argument('folder_id',
+                            type=str,
+                            required=True,
                             help='folder cannot be blank!')
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))

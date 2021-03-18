@@ -1,13 +1,13 @@
 <template>
-  <el-menu>
+  <el-menu @select="handleSelect">
     <!-- 这里是总的和未读 -->
     <el-submenu index="0">
       <template #title>
         <i class="el-icon-house"></i>
         <span>ALL</span>
       </template>
-      <el-menu-item index="1-1">All</el-menu-item>
-      <el-menu-item index="1-2">Unread</el-menu-item>
+      <el-menu-item index="-1">All</el-menu-item>
+      <el-menu-item index="-2">Unread</el-menu-item>
     </el-submenu>
     <!-- 这里开始是各个文件夹 -->
     <template v-for="folder in state.folders" :key="folder.folder_id">
@@ -19,11 +19,15 @@
         </template>
         <!-- 文件夹订阅 -->
         <template v-for="feed in folder.folder_list" :key="feed.feed_id">
-          <el-menu-item :index="feed.feed_id">{{ feed.title }}</el-menu-item>
+          <el-menu-item :index="String(feed.feed_id)">
+            <el-badge :value="12" class="item">
+              {{ feed.title }}
+            </el-badge></el-menu-item
+          >
         </template>
       </el-submenu>
     </template>
-    <el-submenu index="-1">
+    <el-submenu index="-3">
       <template #title>
         <i class="el-icon-s-opportunity"></i>
         <span>推荐</span>
@@ -46,11 +50,17 @@ import { reactive } from "vue";
 import { ElMessage } from "element-plus";
 export default {
   props: {},
-  setup(props) {
+  setup(props, context) {
     const state = reactive({
       folders: [],
     });
     const { ctx } = getCurrentInstance();
+    const handleSelect = (keyPath, key) => {
+      context.emit("feedInfo", {
+        folder_id: parseInt(key),
+        feed_id: parseInt(keyPath),
+      });
+    };
     ctx.$axios
       .get("/api/subscriptions")
       .then((res) => {
@@ -59,10 +69,14 @@ export default {
       .catch((error) => {
         ElMessage.error(error);
       });
-    return { state };
+    return { state, handleSelect };
   },
 };
 </script>
 
 <style scoped>
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
 </style>
