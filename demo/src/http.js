@@ -21,7 +21,7 @@ axios.interceptors.request.use((config) => {
   config.headers.Authorization = localStorage.getItem('Token');
   return config;
 });
-// 相应拦截
+// 响应拦截
 axios.interceptors.response.use(
   (response) => {
     endLoading();

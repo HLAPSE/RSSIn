@@ -63,12 +63,14 @@ export default {
     watch(
       () => props.selectFeed.feed_id,
       (newFeedId) => {
-        getEntries(newFeedId);
+        getEntries(newFeedId, props.selectFeed.folder_id);
       }
     );
-    const getEntries = (newFeedId) => {
+    const getEntries = (newFeedId, foldId) => {
       ctx.$axios
-        .get("/api/entries", { params: { feed_id: newFeedId } })
+        .get("/api/entries", {
+          params: { feed_id: newFeedId, folder_id: foldId },
+        })
         .then((res) => {
           state.lists = res.data.data;
           // 创建数组用于展示与隐藏

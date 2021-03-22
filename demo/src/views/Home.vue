@@ -16,7 +16,8 @@
           >
           <el-col :span="2" :offset="6">
             <el-menu-item>
-              <el-avatar icon="el-icon-user-solid"></el-avatar>
+              <!-- <el-avatar icon="el-icon-user-solid"></el-avatar> -->
+              Hello! 乌拉乌
             </el-menu-item>
           </el-col>
         </el-row>

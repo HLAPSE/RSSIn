@@ -13,13 +13,37 @@ class Entries(Resource):
                             type=int,
                             required=True,
                             help='feed_id cannot be blank!')
+        parser.add_argument('folder_id',
+                            type=int,
+                            required=True,
+                            help='feed_id cannot be blank!')
         args = parser.parse_args()
-        feed = Feed.query.get(args["feed_id"])
+        entry_list = []
         read_list = [
             read.entry_id
             for read in Read.query.filter_by(user_id=current_user.id).all()
         ]
-        entry_list = [entry for entry in feed.entries]
+        if not args["folder_id"]:
+            folder_list = [folder for folder in current_user.folders]
+            feed_list = []
+            for folder in folder_list:
+                feed_list += folder.feeds
+            # 这里拿到所有的feed
+            feeds = [feed.feed for feed in feed_list]
+            if args["feed_id"] == -1:
+                for feed in feeds:
+                    entry_list += feed.entries
+            else:
+                # 这里是所有未读的文章
+                for feed in feeds:
+                    entry_list += [
+                        entry for entry in feed.entries
+                        if entry.id not in read_list
+                    ]
+
+        else:
+            feed = Feed.query.get(args["feed_id"])
+            entry_list = [entry for entry in feed.entries]
         data = []
         for entry in entry_list:
             entry_info = {}
