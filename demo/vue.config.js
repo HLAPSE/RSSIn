@@ -14,4 +14,6 @@ module.exports = {
       },
     },
   },
+
+  runtimeCompiler: true
 };

@@ -17,7 +17,7 @@
           <el-col :span="2" :offset="6">
             <el-menu-item>
               <!-- <el-avatar icon="el-icon-user-solid"></el-avatar> -->
-              Hello! 乌拉乌
+              Hello!{{ state.user.name }}
             </el-menu-item>
           </el-col>
         </el-row>
@@ -39,18 +39,32 @@
 // @ is an alias to /src
 import AsiderForm from "@/components/AsiderForm";
 import Entry from "@/components/Entry";
-import { reactive } from "vue";
+import { reactive, getCurrentInstance } from "vue";
 export default {
   name: "Home",
   components: { AsiderForm, Entry },
   setup() {
+    const state = reactive({
+      user: {},
+    });
+    const { ctx } = getCurrentInstance();
     const isCollapse = false;
-    const selectFeed = reactive({ folder_id: 0, feed_id: 1 });
+    const selectFeed = reactive({ folder_id: 0, feed_id: -10 });
+    // 获取所选的文件夹
     const feedInfoFun = (selectInfo) => {
       selectFeed.folder_id = selectInfo.folder_id;
       selectFeed.feed_id = selectInfo.feed_id;
     };
-    return { isCollapse, feedInfoFun, selectFeed };
+    // 获取用户信息
+    ctx.$axios
+      .get("/api/users")
+      .then((res) => {
+        state.user = res.data;
+      })
+      .catch((error) => {
+        ElMessage.error(error.message);
+      });
+    return { isCollapse, feedInfoFun, selectFeed, state };
   },
 };
 </script>

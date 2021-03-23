@@ -53,6 +53,7 @@ export default {
   setup(props, context) {
     const state = reactive({
       folders: [],
+      options: [],
     });
     const { ctx } = getCurrentInstance();
     const handleSelect = (keyPath, key) => {
@@ -67,7 +68,7 @@ export default {
         state.folders = res.data.data;
       })
       .catch((error) => {
-        ElMessage.error(error);
+        ElMessage.error(error.message);
       });
     return { state, handleSelect };
   },

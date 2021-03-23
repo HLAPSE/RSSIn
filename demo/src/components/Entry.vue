@@ -1,12 +1,28 @@
 <template>
   <el-row>
-    <el-col :span="12" :offset="0"><h3>标题</h3></el-col>
-  </el-row>
-  <el-row :gutter="20">
-    <el-col :span="12" :offset="0"
-      ><el-button icon="el-icon-search" circle></el-button
-    ></el-col>
-    <el-col :span="12" :offset="0"></el-col>
+    <el-col :span="16" :offset="0">
+      <el-link :underline="false" :href="state.feed_info.link" target="_blank">
+        <h2>{{ state.feed_info.title }}</h2>
+      </el-link>
+      <h5>{{ state.feed_info.sub_title }}</h5>
+    </el-col>
+    <el-col :span="8" :offset="0">
+      <el-select
+        v-model="state.value"
+        placeholder="Move To ..."
+        @change="changeFold"
+      >
+        <el-option
+          v-for="item in state.options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          :disabled="item.disabled"
+        >
+        </el-option>
+      </el-select>
+      <el-button icon="el-icon-search" circle></el-button>
+    </el-col>
   </el-row>
   <template v-for="(entry, index) in state.lists" :key="entry.id">
     <el-card class="box-card">
@@ -28,7 +44,7 @@
               circle
             ></el-button>
             <el-button @click="state.display[index] = !state.display[index]">{{
-              state.display[index] ? "关闭" : "展开"
+              state.display[index] ? "收起" : "展开"
             }}</el-button>
           </el-col>
         </el-row>
@@ -48,7 +64,7 @@
 
 <script>
 // import {} from "@vue/composition-api";
-import { getCurrentInstance, watch, reactive } from "vue";
+import { getCurrentInstance, watch, reactive, h } from "vue";
 import { ElMessage } from "element-plus";
 
 export default {
@@ -59,11 +75,42 @@ export default {
   },
   setup(props, context) {
     const { ctx } = getCurrentInstance();
-    let state = reactive({});
+    const state = reactive({
+      feed_info: {},
+      lists: [],
+      options: [],
+      // 获取文件夹选项
+      value: "",
+    });
     watch(
       () => props.selectFeed.feed_id,
       (newFeedId) => {
         getEntries(newFeedId, props.selectFeed.folder_id);
+      }
+    );
+    // 渲染选择文件夹
+    watch(
+      () => props.selectFeed.folder_id,
+      (folder_id) => {
+        state.options = [];
+        ctx.$axios
+          .get("/api/subscriptions")
+          .then((res) => {
+            for (let folder of res.data.data) {
+              let option = { value: folder.folder_id, label: folder.folder };
+              if (folder.folder_id == folder_id) {
+                option = {
+                  value: folder.folder_id,
+                  label: folder.folder,
+                  disabled: true,
+                };
+              }
+              state.options.push(option);
+            }
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
       }
     );
     const getEntries = (newFeedId, foldId) => {
@@ -79,10 +126,27 @@ export default {
           );
         })
         .catch((error) => {
-          ElMessage.error(error);
+          ElMessage.error(error.message);
+        });
+      ctx.$axios
+        .get("/api/infos", {
+          params: { type: "feed", id: props.selectFeed.feed_id },
+        })
+        .then((res) => {
+          state.feed_info = res.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+          // ctx.$notify({
+          //   title: "Failed to get data",
+          //   message: h("i", { style: "color: teal" }, error.message),
+          // });
         });
     };
-    return { state };
+    const changeFold = () => {
+      console.log("folder_id", state.value, "id", props.selectFeed.feed_id);
+    };
+    return { state, changeFold };
   },
 };
 </script>
