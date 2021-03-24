@@ -72,11 +72,11 @@ class Subscriptions(Resource):
         parser.add_argument('feed_id',
                             type=int,
                             required=True,
-                            help='id cannot be blank!')
+                            help='feed_id cannot be blank!')
         parser.add_argument('folder_id',
                             type=str,
                             required=True,
-                            help='folder cannot be blank!')
+                            help='folder_id cannot be blank!')
         parser.add_argument('feed_alias',
                             type=str,
                             help='alias cannot be blank!')

@@ -11,6 +11,7 @@
         v-model="state.value"
         placeholder="Move To ..."
         @change="changeFold"
+        v-if="state.feed_info.id > 0"
       >
         <el-option
           v-for="item in state.options"
@@ -144,7 +145,21 @@ export default {
         });
     };
     const changeFold = () => {
-      console.log("folder_id", state.value, "id", props.selectFeed.feed_id);
+      ctx.$axios
+        .put("/api/subscriptions", {
+          folder_id: props.selectFeed.folder_id,
+          folder_id_dst: state.value,
+          feed_id: props.selectFeed.feed_id,
+        })
+        .then((res) => {
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
     };
     return { state, changeFold };
   },
