@@ -4,6 +4,34 @@
       <el-link :underline="false" :href="state.feed_info.link" target="_blank">
         <h2>{{ state.feed_info.title }}</h2>
       </el-link>
+      <el-popover placement="top" :width="160" v-model:visible="state.visible">
+        <el-input
+          size="mini"
+          placeholder="Enter another alias"
+          v-model="state.alias"
+          clearable
+        >
+        </el-input>
+        <div style="text-align: right; margin: 0">
+          <el-button size="mini" type="text" @click="state.visible = false"
+            >cancel</el-button
+          >
+          <el-button type="primary" size="mini" @click="changeAlias"
+            >confirm</el-button
+          >
+        </div>
+        <template #reference>
+          <el-button
+            type="text"
+            icon="el-icon-edit"
+            circle
+            @click="
+              state.visible = true;
+              state.alias = '';
+            "
+          ></el-button>
+        </template>
+      </el-popover>
       <h5>{{ state.feed_info.sub_title }}</h5>
     </el-col>
     <el-col :span="8" :offset="0">
@@ -26,6 +54,7 @@
     </el-col>
   </el-row>
   <template v-for="(entry, index) in state.lists" :key="entry.id">
+    <el-divider></el-divider>
     <el-card class="box-card">
       <div class="card-header">
         <el-link
@@ -82,6 +111,9 @@ export default {
       options: [],
       // 获取文件夹选项
       value: "",
+      // 编辑订阅名称
+      visible: false,
+      alias: "",
     });
     watch(
       () => props.selectFeed.feed_id,
@@ -131,7 +163,11 @@ export default {
         });
       ctx.$axios
         .get("/api/infos", {
-          params: { type: "feed", id: props.selectFeed.feed_id },
+          params: {
+            type: "feed",
+            id: props.selectFeed.feed_id,
+            folder_id: props.selectFeed.folder_id,
+          },
         })
         .then((res) => {
           state.feed_info = res.data;
@@ -161,7 +197,26 @@ export default {
           ElMessage.error(error.message);
         });
     };
-    return { state, changeFold };
+    const changeAlias = () => {
+      state.visible = false;
+      ctx.$axios
+        .put("/api/subscriptions", {
+          folder_id: props.selectFeed.folder_id,
+          feed_alias: state.alias,
+          feed_id: props.selectFeed.feed_id,
+        })
+        .then((res) => {
+          state.feed_info.title = state.alias;
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    return { state, changeFold, changeAlias };
   },
 };
 </script>
