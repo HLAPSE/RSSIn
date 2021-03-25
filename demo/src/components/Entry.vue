@@ -4,7 +4,12 @@
       <el-link :underline="false" :href="state.feed_info.link" target="_blank">
         <h2>{{ state.feed_info.title }}</h2>
       </el-link>
-      <el-popover placement="top" :width="160" v-model:visible="state.visible">
+      <el-popover
+        placement="top"
+        :width="160"
+        v-model:visible="state.visible"
+        v-if="state.feed_info.id > 0"
+      >
         <el-input
           size="mini"
           placeholder="Enter another alias"
@@ -39,7 +44,7 @@
         v-model="state.value"
         placeholder="Move To ..."
         @change="changeFold"
-        v-if="state.feed_info.id > 0"
+        v-show="state.feed_info.id > 0"
       >
         <el-option
           v-for="item in state.options"
