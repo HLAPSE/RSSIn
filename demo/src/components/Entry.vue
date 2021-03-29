@@ -67,18 +67,21 @@
           :href="entry.link"
           target="_blank"
           :underline="false"
-          ><h3>{{ entry.title }}</h3></el-link
+          ><h3>
+            <el-badge is-dot class="item" :hidden="entry.read">{{
+              entry.title
+            }}</el-badge>
+          </h3></el-link
         >
         <el-row>
           <el-col :span="6" :offset="18">
             <el-button type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button type="success" icon="el-icon-check" circle></el-button>
             <el-button
               type="warning"
               icon="el-icon-star-off"
               circle
             ></el-button>
-            <el-button @click="state.display[index] = !state.display[index]">{{
+            <el-button @click="readEntry(index, entry.read, entry.id)">{{
               state.display[index] ? "收起" : "展开"
             }}</el-button>
           </el-col>
@@ -221,9 +224,30 @@ export default {
           ElMessage.error(error.message);
         });
     };
-    return { state, changeFold, changeAlias };
+    const addrecord = (info) => {
+      if (state.display[info.index]) {
+        ctx.$axios
+          .post("/api/entries", {
+            entry_id: info.id,
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
+      }
+    };
+    const readEntry = (index, read, id) => {
+      state.display[index] = !state.display[index];
+      if (state.display[index] && !read) {
+        setTimeout(addrecord, 3000, { index: index, id: id });
+      }
+    };
+    return { state, changeFold, changeAlias, readEntry };
   },
 };
 </script>
 <style scoped>
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
 </style>
