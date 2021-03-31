@@ -75,7 +75,12 @@
         >
         <el-row>
           <el-col :span="6" :offset="18">
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="state.noteinput[index] = !state.noteinput[index]"
+            ></el-button>
             <el-button
               type="warning"
               icon="el-icon-star-off"
@@ -86,11 +91,39 @@
             }}</el-button>
           </el-col>
         </el-row>
+        <div v-if="state.noteinput[index]">
+          <el-row>
+            <el-col :span="15">
+              <el-input
+                type="textarea"
+                placeholder="Enter something"
+                :autosize="{ minRows: 2, maxRows: 4 }"
+                v-model="state.note[index]"
+              ></el-input>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :offset="9">
+              <el-select v-model="state.notefoldid" placeholder="请选择">
+                <el-option
+                  v-for="item in state.notefolders"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-button type="primary" @click="addNote(entry.id, index)"
+                >确定</el-button
+              >
+            </el-col>
+          </el-row>
+        </div>
       </div>
       <div class="text item">
         <li>{{ entry.updateddate }}</li>
       </div>
-      <div v-if="state.display[index]">
+      <div v-if="state.display[index]" @mouseup="handleMouseSelect">
         <span v-html="entry.content"></span>
       </div>
     </el-card>
@@ -122,6 +155,8 @@ export default {
       // 编辑订阅名称
       visible: false,
       alias: "",
+      note_fold: [],
+      notefoldid: "",
     });
     watch(
       () => props.selectFeed.feed_id,
@@ -152,6 +187,14 @@ export default {
           .catch((error) => {
             ElMessage.error(error.message);
           });
+        ctx.$axios
+          .get("/api/notefolders")
+          .then((res) => {
+            state.notefolders = res.data.data;
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
       }
     );
     const getEntries = (newFeedId, foldId) => {
@@ -163,6 +206,12 @@ export default {
           state.lists = res.data.data;
           // 创建数组用于展示与隐藏
           state.display = Array.apply(null, Array(state.lists.length)).map(
+            () => false
+          );
+          state.note = Array.apply(null, Array(state.lists.length)).map(
+            () => ""
+          );
+          state.noteinput = Array.apply(null, Array(state.lists.length)).map(
             () => false
           );
         })
@@ -241,7 +290,38 @@ export default {
         setTimeout(addrecord, 3000, { index: index, id: id });
       }
     };
-    return { state, changeFold, changeAlias, readEntry };
+    // 这里获取选中文本，以后可能就不用这个功能了
+    const handleMouseSelect = () => {
+      let text = window.getSelection().toString();
+      if (text != "") {
+        console.log(text);
+      }
+    };
+    const addNote = (entry_id, index) => {
+      ctx.$axios
+        .post("/api/notes", {
+          content: state.note[index],
+          notefolder_id: state.notefoldid,
+          entry_id: entry_id,
+        })
+        .then((res) => {
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    return {
+      state,
+      changeFold,
+      changeAlias,
+      readEntry,
+      handleMouseSelect,
+      addNote,
+    };
   },
 };
 </script>
