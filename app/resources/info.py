@@ -1,7 +1,7 @@
 from flask import jsonify, make_response
 from flask_jwt_extended import create_access_token, current_user, jwt_required
 from flask_restful import Resource, reqparse
-from app.models.model import FolderFeed, User, db, Feed
+from app.models.model import Entry, FolderFeed, User, db, Feed
 
 
 class Infos(Resource):
