@@ -63,6 +63,33 @@
                   >{{ item.entry_info.title }}</el-link
                 >
                 <div>
+                  <el-dropdown trigger="click" @command="handleCommand">
+                    <span class="el-dropdown-link">
+                      更改文件夹<i
+                        class="el-icon-arrow-down el-icon--right"
+                      ></i>
+                    </span>
+                    <template #dropdown>
+                      <el-dropdown-menu
+                        v-for="folder in state.notefolder"
+                        :key="folder.id"
+                      >
+                        <el-dropdown-item
+                          v-if="folder.id != state.currentfolder"
+                          :command="String(folder.id + ' ' + item.note_id)"
+                        >
+                          {{ folder.name }}
+                        </el-dropdown-item>
+                        <el-dropdown-item
+                          v-else
+                          disabled
+                          :command="String(folder.id + ' ' + item.note_id)"
+                        >
+                          {{ folder.name }}
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
                   <el-button
                     type="primary"
                     icon="el-icon-edit"
@@ -120,6 +147,8 @@ export default {
       currentnote: "",
       // 当前选中的笔记
       item: {},
+      // 这里放笔记文件夹
+      notefolder: {},
     });
     const { ctx } = getCurrentInstance();
     ctx.$axios
@@ -130,6 +159,7 @@ export default {
       .catch((error) => {
         ElMessage.error(error.message);
       });
+    // 用来获取笔记
     ctx.$axios
       .get("/api/notes")
       .then((res) => {
@@ -138,14 +168,21 @@ export default {
       .catch((error) => {
         ElMessage.error(error.message);
       });
+    // 用来获取笔记文件夹
+    ctx.$axios
+      .get("/api/notefolders")
+      .then((res) => {
+        state.notefolder = res.data.data;
+      })
+      .catch((error) => {
+        ElMessage.error(error.message);
+      });
     const handleSelect = (key, lists, name) => {
       state.currentfolder = parseInt(key);
       state.currentlist = lists;
       state.currentfoldername = name;
-      console.log(state.currentfolder, state.currentlist);
     };
     const deletenote = (id) => {
-      console.log(id);
       ctx.$axios
         .delete("/api/notes", {
           params: {
@@ -189,6 +226,25 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    const handleCommand = (command) => {
+      let folder_id = parseInt(command.split(" ")[0]);
+      let note_id = parseInt(command.split(" ")[1]);
+      ctx.$axios
+        .put("/api/notes", {
+          note_id: note_id,
+          content: state.currentnote,
+          notefolder_id_dst: folder_id,
+        })
+        .then((res) => {
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     return {
       state,
       handleSelect,
@@ -196,6 +252,7 @@ export default {
       opendialog,
       handleClose,
       putnote,
+      handleCommand,
     };
   },
 };
@@ -218,4 +275,18 @@ export default {
 /* .box-card {
   width: 480px;
 } */
+/* 下拉菜单样式 */
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.demonstration {
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 </style>
