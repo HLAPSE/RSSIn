@@ -45,6 +45,9 @@
               {{ folder.folder }}
             </el-menu-item>
           </template>
+          <el-affix position="top" :offset="20">
+            <el-button type="primary" icon="el-icon-s-tools" circle></el-button>
+          </el-affix>
         </el-menu>
       </el-aside>
       <el-main>
