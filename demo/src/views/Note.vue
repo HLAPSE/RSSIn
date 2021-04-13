@@ -31,7 +31,6 @@
       <el-aside>
         <!-- 这里是订阅文件夹 -->
         <el-menu>
-          <!-- 这里开始是各个文件夹 -->
           <template v-for="folder in state.notefolders" :key="folder.folder_id">
             <el-menu-item
               :index="String(folder.folder_id)"
@@ -68,6 +67,7 @@
                     type="primary"
                     icon="el-icon-edit"
                     circle
+                    @click="opendialog(item.content, item)"
                   ></el-button>
                   <el-button
                     type="danger"
@@ -84,6 +84,27 @@
       </el-main>
     </el-container>
   </el-container>
+  <!-- 用来修改笔记的弹出框 -->
+  <el-dialog
+    title="修改笔记"
+    v-model="state.dialogVisible"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <el-input
+      type="textarea"
+      :rows="2"
+      placeholder="state.currentnote"
+      v-model="state.currentnote"
+    >
+    </el-input>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="state.dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="putnote">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script>
 import { reactive, getCurrentInstance } from "vue";
@@ -95,6 +116,10 @@ export default {
       currentlist: [],
       currentfolder: 0,
       currentfoldername: "",
+      dialogVisible: false,
+      currentnote: "",
+      // 当前选中的笔记
+      item: {},
     });
     const { ctx } = getCurrentInstance();
     ctx.$axios
@@ -137,7 +162,41 @@ export default {
           ElMessage.error(error.message);
         });
     };
-    return { state, handleSelect, deletenote };
+    const opendialog = (content, item) => {
+      state.currentnote = content;
+      state.dialogVisible = true;
+      state.item = item;
+    };
+    const handleClose = () => {
+      state.dialogVisible = false;
+    };
+    const putnote = () => {
+      state.item.content = state.currentnote;
+      state.dialogVisible = false;
+      ctx.$axios
+        .put("/api/notes", {
+          note_id: state.item.note_id,
+          content: state.currentnote,
+          notefolder_id_dst: -1,
+        })
+        .then((res) => {
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    return {
+      state,
+      handleSelect,
+      deletenote,
+      opendialog,
+      handleClose,
+      putnote,
+    };
   },
 };
 </script>
