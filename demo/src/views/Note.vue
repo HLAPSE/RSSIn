@@ -48,6 +48,67 @@
           <el-affix position="top" :offset="20">
             <el-button type="primary" icon="el-icon-s-tools" circle></el-button>
           </el-affix>
+          <!-- 笔记管理 -->
+          <el-dialog
+            title="管理笔记文件夹"
+            v-model="state.centerDialogVisible"
+            width="50%"
+            center
+          >
+            <div>
+              <el-table
+                :data="
+                  state.notefolder.filter(
+                    (data) =>
+                      !state.search ||
+                      data.name
+                        .toLowerCase()
+                        .includes(state.search.toLowerCase())
+                  )
+                "
+                style="width: 100%"
+              >
+                <el-table-column label="Name" prop="name"> </el-table-column>
+                <el-table-column label="Conut" prop="note_count">
+                </el-table-column>
+                <el-table-column align="right">
+                  <template #header>
+                    <el-input
+                      v-model="state.search"
+                      size="mini"
+                      placeholder="输入关键字搜索"
+                    />
+                  </template>
+                  <template #default="scope">
+                    <el-button
+                      size="mini"
+                      @click="handleEdit(scope.$index, scope.row)"
+                      >Edit</el-button
+                    >
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >Delete</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            {{ state.notefolder }}
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="state.centerDialogVisible = false"
+                  >取 消</el-button
+                >
+                <el-button
+                  type="primary"
+                  @click="state.centerDialogVisible = false"
+                  >确 定</el-button
+                >
+              </span>
+            </template>
+          </el-dialog>
         </el-menu>
       </el-aside>
       <el-main>
@@ -152,6 +213,9 @@ export default {
       item: {},
       // 这里放笔记文件夹
       notefolder: {},
+      // 笔记管理显示
+      centerDialogVisible: true,
+      search: "",
     });
     const { ctx } = getCurrentInstance();
     ctx.$axios
@@ -248,6 +312,13 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    // 用来删除与编辑文件夹
+    const handleEdit = (index, row) => {
+      console.log(index, row);
+    };
+    const handleDelete = (index, row) => {
+      console.log(index, row);
+    };
     return {
       state,
       handleSelect,
@@ -256,6 +327,8 @@ export default {
       handleClose,
       putnote,
       handleCommand,
+      handleEdit,
+      handleDelete,
     };
   },
 };
