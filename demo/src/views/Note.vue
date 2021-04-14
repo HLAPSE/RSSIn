@@ -46,7 +46,12 @@
             </el-menu-item>
           </template>
           <el-affix position="top" :offset="20">
-            <el-button type="primary" icon="el-icon-s-tools" circle></el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-s-tools"
+              circle
+              @click="state.centerDialogVisible = !state.centerDialogVisible"
+            ></el-button>
           </el-affix>
           <!-- 笔记管理 -->
           <el-dialog
@@ -95,7 +100,6 @@
                 </el-table-column>
               </el-table>
             </div>
-            {{ state.notefolder }}
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="state.centerDialogVisible = false"
@@ -214,7 +218,7 @@ export default {
       // 这里放笔记文件夹
       notefolder: [],
       // 笔记管理显示
-      centerDialogVisible: true,
+      centerDialogVisible: false,
       search: "",
     });
     const { ctx } = getCurrentInstance();
@@ -317,7 +321,26 @@ export default {
       console.log(index, row);
     };
     const handleDelete = (index, row) => {
-      console.log(index, row);
+      if (！row.note_count) {
+        ElMessage.error("文件夹不为空");
+      } else {
+        ctx.$axios
+          .delete("/api/notefolders", {
+            params: {
+              notefolder_id: row.id,
+            },
+          })
+          .then((res) => {
+            delete state.notefolder[index];
+            ElMessage.success({
+              message: res.data.message,
+              type: "success",
+            });
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
+      }
     };
     return {
       state,
