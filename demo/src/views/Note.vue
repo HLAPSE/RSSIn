@@ -212,7 +212,7 @@ export default {
       // 当前选中的笔记
       item: {},
       // 这里放笔记文件夹
-      notefolder: {},
+      notefolder: [],
       // 笔记管理显示
       centerDialogVisible: true,
       search: "",
