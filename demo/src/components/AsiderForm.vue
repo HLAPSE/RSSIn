@@ -200,7 +200,69 @@ export default {
           ElMessage.error(error.message);
         });
     };
-    return { state, handleSelect, addfolderopen };
+    const handleDelete = (index, row) => {
+      if (row.folder_list.length) {
+        ElMessage.error("文件夹不为空");
+      } else {
+        ctx.$axios
+          .delete("/api/folders", {
+            params: {
+              folder_id: row.folder_id,
+            },
+          })
+          .then((res) => {
+            ElMessage.success({
+              message: res.data.message,
+              type: "success",
+            });
+            freshfolder();
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
+      }
+    };
+    const handleEdit = (index, row) => {
+      ctx
+        .$prompt("请输入名称", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(({ value }) => {
+          if (value) {
+            editfoldname(row, value);
+          } else {
+            ctx.$message({
+              type: "info",
+              message: "不能为空",
+            });
+          }
+        })
+        .catch(() => {
+          ctx.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    };
+    const editfoldname = (row, name) => {
+      ctx.$axios
+        .put("/api/folders", {
+          folder_id: row.folder_id,
+          folder_name: name,
+        })
+        .then((res) => {
+          row.folder = name;
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    return { state, handleSelect, addfolderopen, handleDelete, handleEdit };
   },
 };
 </script>

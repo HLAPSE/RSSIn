@@ -341,8 +341,27 @@ export default {
     };
     // 用来删除与编辑文件夹
     const handleEdit = (index, row) => {
-      open(row);
-      console.log(index, row);
+      ctx
+        .$prompt("请输入名称", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(({ value }) => {
+          if (value) {
+            editnotefoldname(row, value);
+          } else {
+            ctx.$message({
+              type: "info",
+              message: "不能为空",
+            });
+          }
+        })
+        .catch(() => {
+          ctx.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
     };
     const handleDelete = (index, row) => {
       if (row.note_count) {
@@ -365,23 +384,6 @@ export default {
             ElMessage.error(error.message);
           });
       }
-    };
-    // 打开笔记管理编辑提示框
-    const open = (row) => {
-      ctx
-        .$prompt("请输入名称", "", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        })
-        .then(({ value }) => {
-          editnotefoldname(row, value);
-        })
-        .catch(() => {
-          ctx.$message({
-            type: "info",
-            message: "取消输入",
-          });
-        });
     };
     // 提交修改笔记文件夹
     const editnotefoldname = (row, name) => {
