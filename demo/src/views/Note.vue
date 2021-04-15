@@ -318,6 +318,7 @@ export default {
     };
     // 用来删除与编辑文件夹
     const handleEdit = (index, row) => {
+      open(row);
       console.log(index, row);
     };
     const handleDelete = (index, row) => {
@@ -342,6 +343,40 @@ export default {
           });
       }
     };
+    // 打开笔记管理编辑提示框
+    const open = (row) => {
+      ctx
+        .$prompt("请输入名称", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(({ value }) => {
+          editnotefoldname(row, value);
+        })
+        .catch(() => {
+          ctx.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    };
+    const editnotefoldname = (row, name) => {
+      ctx.$axios
+        .put("/api/notefolders", {
+          notefolder_id: row.id,
+          notefolder_name: name,
+        })
+        .then((res) => {
+          row.name = name;
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     return {
       state,
       handleSelect,
@@ -352,6 +387,7 @@ export default {
       handleCommand,
       handleEdit,
       handleDelete,
+      open,
     };
   },
 };
