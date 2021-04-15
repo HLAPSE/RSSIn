@@ -345,7 +345,7 @@ export default {
       console.log(index, row);
     };
     const handleDelete = (index, row) => {
-      if (!row.note_count) {
+      if (row.note_count) {
         ElMessage.error("文件夹不为空");
       } else {
         ctx.$axios

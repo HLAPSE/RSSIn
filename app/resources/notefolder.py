@@ -1,6 +1,6 @@
 import re
 
-from app.models.model import Folder, NoteFolder, db
+from app.models.model import Folder, Note, NoteFolder, db
 from flask import jsonify
 from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource, reqparse
@@ -14,7 +14,8 @@ class NoteFolders(Resource):
             folder_info = {}
             folder_info["name"] = folder.name
             folder_info["id"] = folder.id
-            folder_info["note_count"] = folder.note_count
+            folder_info["note_count"] = Note.query.filter_by(
+                notefolder_id=folder.id).count()
             data.append(folder_info)
         return jsonify(data=data)
 
