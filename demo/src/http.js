@@ -17,18 +17,15 @@ const endLoading = () => {
 
 // 请求拦截
 axios.interceptors.request.use((config) => {
-  startLoading();
   config.headers.Authorization = localStorage.getItem('Token');
   return config;
 });
 // 响应拦截
 axios.interceptors.response.use(
   (response) => {
-    endLoading();
     return response;
   },
   (error) => {
-    endLoading();
     return Promise.reject(error);
   }
 );
