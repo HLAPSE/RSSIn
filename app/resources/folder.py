@@ -18,40 +18,53 @@ class Folders(Resource):
     @jwt_required()
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('folder_name', type=str, required=True,
-                            help='subscription_url cannot be blank!')
+        parser.add_argument('folder_name',
+                            type=str,
+                            required=True,
+                            help='folder_name cannot be blank!')
         args = parser.parse_args()
-        if args["folder_name"] not in [folder.name for folder in current_user.folders]:
+        if args["folder_name"] not in [
+                folder.name for folder in current_user.folders
+        ]:
             folder = Folder(name=args["folder_name"])
             current_user.folders.append(folder)
             db.session.commit()
             return jsonify({'message': 'success!'})
         else:
             return jsonify({'message': 'folder has existed!'})
+
     @jwt_required()
     def put(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('folder_name', type=str, required=True,
+        parser.add_argument('folder_name',
+                            type=str,
+                            required=True,
                             help='folder_name cannot be blank!')
-        parser.add_argument('folder_id', type=int, required=True,
+        parser.add_argument('folder_id',
+                            type=int,
+                            required=True,
                             help='folder_id cannot be blank!')
         args = parser.parse_args()
-        if args["folder_name"] not in [folder.name for folder in current_user.folders]:
+        if args["folder_name"] not in [
+                folder.name for folder in current_user.folders
+        ]:
             folder = Folder.query.get(args["folder_id"])
             folder.name = args["folder_name"]
             db.session.commit()
             return jsonify({'message': 'success!'})
         else:
-            return jsonify({'message': args["folder_name"]+' has existed!'})
-    
+            return jsonify({'message': args["folder_name"] + ' has existed!'})
+
     @jwt_required()
     def delete(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('folder_id', type=int, required=True,
+        parser.add_argument('folder_id',
+                            type=int,
+                            required=True,
                             help='folder_id cannot be blank!')
         args = parser.parse_args()
         folder = Folder.query.get(args["folder_id"])
-        if  folder and folder.user.id == current_user.id:
+        if folder and folder.user.id == current_user.id:
             db.session.delete(folder)
             db.session.commit()
             return jsonify({'message': 'success!'})

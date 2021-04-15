@@ -42,6 +42,83 @@
         >点这里关闭推荐<i class="el-icon-delete-solid"></i
       ></el-menu-item>
     </el-submenu>
+    <!-- 管理页面按钮 -->
+    <el-affix position="top" :offset="20">
+      <el-button
+        type="primary"
+        icon="el-icon-s-tools"
+        circle
+        @click="state.centerDialogVisible = !state.centerDialogVisible"
+      ></el-button>
+    </el-affix>
+    <el-dialog
+      title="管理订阅文件夹"
+      v-model="state.centerDialogVisible"
+      width="50%"
+      center
+    >
+      <div>
+        <el-table
+          :data="
+            state.folders.filter(
+              (data) =>
+                !state.search ||
+                data.folder.toLowerCase().includes(state.search.toLowerCase())
+            )
+          "
+          style="width: 100%"
+        >
+          <el-table-column label="Name" prop="folder"> </el-table-column>
+          <el-table-column label="Conut" prop="folder_list.length">
+          </el-table-column>
+          <el-table-column align="right">
+            <template #header>
+              <el-row>
+                <el-col :span="18" :offset="0"
+                  ><el-input
+                    v-model="state.search"
+                    size="mini"
+                    placeholder="输入关键字搜索"
+                  />
+                </el-col>
+                <el-col :span="6" :offset="0"
+                  ><el-button
+                    size="mini"
+                    round
+                    type="primary"
+                    icon="el-icon-folder-add"
+                    @click="addfolderopen"
+                  ></el-button
+                ></el-col>
+              </el-row>
+            </template>
+            <template #default="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)"
+                >Edit</el-button
+              >
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+                >Delete</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="state.centerDialogVisible = false"
+            >取 消</el-button
+          >
+          <el-button type="primary" @click="state.centerDialogVisible = false"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </el-menu>
 </template>
 <script>
@@ -54,6 +131,8 @@ export default {
     const state = reactive({
       folders: [],
       options: [],
+      centerDialogVisible: false,
+      search: "",
     });
     const { ctx } = getCurrentInstance();
     const handleSelect = (keyPath, key) => {
@@ -70,7 +149,50 @@ export default {
       .catch((error) => {
         ElMessage.error(error.message);
       });
-    return { state, handleSelect };
+    const addfolderopen = () => {
+      ctx
+        .$prompt("请输入名称", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(({ value }) => {
+          addnotefold(value);
+        })
+        .catch(() => {
+          ctx.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    };
+    const addnotefold = (name) => {
+      ctx.$axios
+        .post("/api/folders", {
+          folder_name: name,
+        })
+        .then((res) => {
+          // 成功之后刷新文件夹
+          freshfolder();
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    const freshfolder = () => {
+      ctx.$axios
+        .get("/api/subscriptions")
+        .then((res) => {
+          state.folders = res.data.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    return { state, handleSelect, addfolderopen };
   },
 };
 </script>

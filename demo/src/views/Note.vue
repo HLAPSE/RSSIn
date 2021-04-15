@@ -419,7 +419,7 @@ export default {
           });
         });
     };
-    // 提交修改笔记文件夹
+    // 提交添加笔记文件夹
     const addnotefold = (name) => {
       ctx.$axios
         .post("/api/notefolders", {

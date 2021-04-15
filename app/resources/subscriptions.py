@@ -22,6 +22,9 @@ class Subscriptions(Resource):
                 feed_info["title"] = feed_id.feed_alias
                 folder_list.append(feed_info)
                 folder_data["folder_list"] = folder_list
+            # 修复小bug,前端需要这个列表来获取数量
+            if not folder_list:
+                folder_data["folder_list"] = folder_list
             data.append(folder_data)
         return jsonify(data=data)
 
