@@ -156,7 +156,15 @@ export default {
           cancelButtonText: "取消",
         })
         .then(({ value }) => {
-          addnotefold(value);
+          if (value) {
+            console.log(value);
+            addnotefold(value);
+          } else {
+            ctx.$message({
+              type: "info",
+              message: "不能为空",
+            });
+          }
         })
         .catch(() => {
           ctx.$message({
