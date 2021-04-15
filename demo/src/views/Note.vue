@@ -78,11 +78,24 @@
                 </el-table-column>
                 <el-table-column align="right">
                   <template #header>
-                    <el-input
-                      v-model="state.search"
-                      size="mini"
-                      placeholder="输入关键字搜索"
-                    />
+                    <el-row>
+                      <el-col :span="18" :offset="0"
+                        ><el-input
+                          v-model="state.search"
+                          size="mini"
+                          placeholder="输入关键字搜索"
+                        />
+                      </el-col>
+                      <el-col :span="6" :offset="0"
+                        ><el-button
+                          size="mini"
+                          round
+                          type="primary"
+                          icon="el-icon-folder-add"
+                          @click="addfolderopen"
+                        ></el-button
+                      ></el-col>
+                    </el-row>
                   </template>
                   <template #default="scope">
                     <el-button
@@ -253,6 +266,16 @@ export default {
       state.currentlist = lists;
       state.currentfoldername = name;
     };
+    const freshnotefolder = () => {
+      ctx.$axios
+        .get("/api/notefolders")
+        .then((res) => {
+          state.notefolder = res.data.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     const deletenote = (id) => {
       ctx.$axios
         .delete("/api/notes", {
@@ -360,6 +383,7 @@ export default {
           });
         });
     };
+    // 提交修改笔记文件夹
     const editnotefoldname = (row, name) => {
       ctx.$axios
         .put("/api/notefolders", {
@@ -368,6 +392,42 @@ export default {
         })
         .then((res) => {
           row.name = name;
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+    // 这里是添加文件夹的两个方法，和上两个一样
+    // 打开添加文件夹提示框
+    const addfolderopen = () => {
+      ctx
+        .$prompt("请输入名称", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(({ value }) => {
+          addnotefold(value);
+        })
+        .catch(() => {
+          ctx.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    };
+    // 提交修改笔记文件夹
+    const addnotefold = (name) => {
+      ctx.$axios
+        .post("/api/notefolders", {
+          notefolder_name: name,
+        })
+        .then((res) => {
+          // 成功之后刷新文件夹
+          freshnotefolder();
           ElMessage.success({
             message: res.data.message,
             type: "success",
@@ -388,6 +448,7 @@ export default {
       handleEdit,
       handleDelete,
       open,
+      addfolderopen,
     };
   },
 };
