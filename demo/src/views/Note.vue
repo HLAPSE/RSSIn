@@ -1,31 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <el-menu mode="horizontal">
-        <el-row type="flex">
-          <el-col :span="2"><el-menu-item>RSSIn</el-menu-item></el-col>
-          <el-col :span="3" :offset="7">
-            <el-menu-item>
-              <router-link to="/"
-                ><i class="el-icon-reading">Reading</i></router-link
-              >
-            </el-menu-item>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-menu-item>
-              <router-link to="/note"
-                ><i class="el-icon-collection">Notebook</i></router-link
-              >
-            </el-menu-item>
-          </el-col>
-          <el-col :span="2" :offset="6">
-            <el-menu-item>
-              <!-- <el-avatar icon="el-icon-user-solid"></el-avatar> -->
-              Hello!{{ state.user.name }}
-            </el-menu-item>
-          </el-col>
-        </el-row>
-      </el-menu>
+      <Menu />
     </el-header>
     <el-container>
       <el-aside>
@@ -217,7 +193,9 @@
 <script>
 import { reactive, getCurrentInstance } from "vue";
 import { ElMessage } from "element-plus";
+import Menu from "@/components/Menu";
 export default {
+  components: { Menu },
   setup() {
     const state = reactive({
       user: {},
