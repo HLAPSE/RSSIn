@@ -45,6 +45,7 @@
         placeholder="Move To ..."
         @change="changeFold"
         v-show="state.feed_info.id > 0"
+        size="mini"
       >
         <el-option
           v-for="item in state.options"
@@ -55,10 +56,23 @@
         >
         </el-option>
       </el-select>
-      <el-button icon="el-icon-search" circle></el-button>
+      <el-col :span="18" :offset="0"
+        ><el-input
+          v-model="state.search"
+          size="mini"
+          placeholder="输入关键字搜索"
+        />
+      </el-col>
     </el-col>
   </el-row>
-  <template v-for="(entry, index) in state.lists" :key="entry.id">
+  <template
+    v-for="(entry, index) in state.lists.filter(
+      (data) =>
+        !state.search ||
+        data.title.toLowerCase().includes(state.search.toLowerCase())
+    )"
+    :key="entry.id"
+  >
     <el-divider></el-divider>
     <el-card class="box-card">
       <div class="card-header">
@@ -157,6 +171,7 @@ export default {
       alias: "",
       note_fold: [],
       notefoldid: "",
+      search: "",
     });
     watch(
       () => props.selectFeed.feed_id,

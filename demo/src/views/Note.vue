@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header height="40px">
       <Menu />
     </el-header>
     <el-container>

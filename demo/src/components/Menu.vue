@@ -1,82 +1,72 @@
 <template>
-  <el-menu mode="horizontal">
-    <el-row type="flex">
-      <el-col :span="2"><el-menu-item>RSSIn</el-menu-item></el-col>
-      <el-col :span="3" :offset="7">
-        <el-menu-item>
-          <router-link to="/"
-            ><i class="el-icon-reading">Reading</i></router-link
-          >
-        </el-menu-item>
-      </el-col>
-      <el-col :span="3" :offset="1">
-        <el-menu-item>
-          <router-link to="/note"
-            ><i class="el-icon-collection">Notebook</i></router-link
-          >
-        </el-menu-item>
-      </el-col>
-      <el-col :span="2" :offset="6">
-        <el-menu-item>
-          <el-button type="text" icon="el-icon-user" @click="openinfo">
-            Hello!{{ state.user.name }}
-          </el-button>
-        </el-menu-item>
-        <el-dialog
-          title="用户信息"
-          v-model="state.centerDialogVisible"
-          width="30%"
-          center
+  <el-row type="flex" align="middle">
+    <el-col :span="2">RSSIn</el-col>
+    <el-col :span="3" :offset="7">
+      <router-link to="/"><i class="el-icon-reading">Reading</i></router-link>
+    </el-col>
+    <el-col :span="3" :offset="1">
+      <router-link to="/note"
+        ><i class="el-icon-collection">Notebook</i></router-link
+      >
+    </el-col>
+    <el-col :span="2" :offset="6">
+      <el-button type="text" icon="el-icon-user" @click="openinfo">
+        Hello!{{ state.user.name }}
+      </el-button>
+      <el-dialog
+        title="用户信息"
+        v-model="state.centerDialogVisible"
+        width="30%"
+        center
+      >
+        <el-form
+          :model="ruleForm"
+          status-icon
+          label-width="100px"
+          class="demo-ruleForm"
         >
-          <el-form
-            :model="ruleForm"
-            status-icon
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="name" prop="name">
-              <el-input
-                v-model="ruleForm.name"
-                :placeholder="state.user.name"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="email" prop="email">
-              <el-input
-                type="email"
-                v-model="ruleForm.email"
-                :placeholder="state.user.email"
-                :rules="[
-                  {
-                    required: true,
-                    message: '请输入邮箱地址',
-                    trigger: 'blur',
-                  },
-                  {
-                    type: 'email',
-                    message: '请输入正确的邮箱地址',
-                    trigger: ['blur', 'change'],
-                  },
-                ]"
-              ></el-input>
-            </el-form-item>
-            <!-- 密码输入不做了 -->
-            <!-- <el-form-item label="passwd" prop="passwd">
+          <el-form-item label="name" prop="name">
+            <el-input
+              v-model="ruleForm.name"
+              :placeholder="state.user.name"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="email" prop="email">
+            <el-input
+              type="email"
+              v-model="ruleForm.email"
+              :placeholder="state.user.email"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入邮箱地址',
+                  trigger: 'blur',
+                },
+                {
+                  type: 'email',
+                  message: '请输入正确的邮箱地址',
+                  trigger: ['blur', 'change'],
+                },
+              ]"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码输入不做了 -->
+          <!-- <el-form-item label="passwd" prop="passwd">
               <el-input
                 v-model.number="ruleForm.passwd"
                 placeholder="Enter the passwd"
               ></el-input>
             </el-form-item> -->
-            <el-form-item>
-              <span class="dialog-footer">
-                <el-button @click="resetForm">取 消</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
-              </span></el-form-item
-            >
-          </el-form>
-        </el-dialog>
-      </el-col>
-    </el-row>
-  </el-menu>
+          <el-form-item>
+            <span class="dialog-footer">
+              <el-button @click="resetForm">取 消</el-button>
+              <el-button type="primary" @click="submitForm">确 定</el-button>
+            </span></el-form-item
+          >
+        </el-form>
+      </el-dialog>
+    </el-col>
+  </el-row>
 </template>
 <script>
 import { reactive, getCurrentInstance } from "vue";
