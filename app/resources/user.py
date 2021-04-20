@@ -59,14 +59,9 @@ class Users(Resource):
                             type=str,
                             required=True,
                             help='email cannot be blank!')
-        parser.add_argument('passwd',
-                            type=str,
-                            required=True,
-                            help='passwd cannot be blank!')
         args = parser.parse_args()
         user.name = args['name']
         user.email = args['email']
-        user.passwd = args['passwd']
         db.session.commit()
         return make_response(jsonify({'message': 'success!'}), 200)
 
