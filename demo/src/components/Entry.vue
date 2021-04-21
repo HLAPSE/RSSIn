@@ -82,9 +82,9 @@
           target="_blank"
           :underline="false"
           ><h3>
-            <el-badge is-dot class="item" :hidden="entry.read">{{
-              entry.title
-            }}</el-badge>
+            <el-badge is-dot class="item" :hidden="entry.read">
+              {{ entry.title }}
+            </el-badge>
           </h3></el-link
         >
         <el-row>

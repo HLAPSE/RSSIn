@@ -52,6 +52,7 @@ class Entries(Resource):
             entry_info["link"] = entry.link
             entry_info["content"] = entry.content
             entry_info["updateddate"] = entry.updateddate
+            entry_info["type"] = entry.feed.type
             entry_info["read"] = True if entry.id in read_list else False
             data.append(entry_info)
         return jsonify(data=data)
