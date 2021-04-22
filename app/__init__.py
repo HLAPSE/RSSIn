@@ -23,6 +23,5 @@ def create_app():
     migrate.init_app(app, db)
     resources.init_app(app)
     auth.init_app(app)
-    # 暂时取消定时任务
-    # tasks.init_app(app)
+    tasks.init_app(app)
     return app
