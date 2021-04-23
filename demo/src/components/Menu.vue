@@ -4,12 +4,16 @@
     <el-col :span="3" :offset="7">
       <router-link to="/"><i class="el-icon-reading">Reading</i></router-link>
     </el-col>
-    <el-col :span="3" :offset="1">
+    <el-col :span="3" :offset="2">
       <router-link to="/note"
         ><i class="el-icon-collection">Notebook</i></router-link
       >
     </el-col>
-    <el-col :span="2" :offset="6">
+    <el-col :span="1" :offset="4">
+      <el-button type="success" size="mini" icon="el-icon-plus"></el-button>
+    </el-col>
+
+    <el-col :span="2" :offset="0">
       <el-button type="text" icon="el-icon-user" @click="openinfo">
         Hello!{{ state.user.name }}
       </el-button>
