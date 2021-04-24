@@ -1,7 +1,7 @@
 from urllib.parse import urlparse as link_parse
 
 from app.common.util import formatDatetime
-from app.models.model import Feed, Folder, FolderFeed, Read, db, Entry
+from app.models.model import Feed, Read, db, Entry
 from feedparser import parse as feed_parse
 from flask import jsonify
 from flask_jwt_extended import current_user, jwt_required
@@ -70,26 +70,29 @@ class Feeds(Resource):
                                 if article_update != str(
                                         article.publisheddate):
                                     # 如果文章更新
-                                    try:
+                                    if hasattr(entry, 'content'):
                                         content = entry.content[0]["value"]
-                                    except AttributeError:
+                                    elif hasattr(entry, 'summary'):
                                         content = entry.summary
+                                    else:
+                                        content = None
                                     article.title = entry.title
                                     article.content = content
                                     article.updateddate = article_update
                                     db.session.commit()
                             else:
                                 # 如果文章不存在
-                                try:
+                                if hasattr(entry, 'content'):
                                     content = entry.content[0]["value"]
-                                except AttributeError:
+                                elif hasattr(entry, 'summary'):
+                                    content = entry.summary
+                                else:
                                     content = None
-                                finally:
-                                    feed_entry = Entry(entry.title, entry.link,
-                                                       content,
-                                                       entry.published_parsed)
-                                    feed.entries.append(feed_entry)
-                                    db.session.commit()
+                                feed_entry = Entry(entry.title, entry.link,
+                                                   content,
+                                                   entry.published_parsed)
+                                feed.entries.append(feed_entry)
+                                db.session.commit()
                         feed.updateddate = feed_updated
                         db.session.commit()
         finally:

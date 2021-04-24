@@ -47,7 +47,7 @@ def fresh_entry():
                     try:
                         content = entry.content[0]["value"]
                     except AttributeError:
-                        content = None
+                        content = entry.summary
                     finally:
                         feed_entry = Entry(entry.title, entry.link, content,
                                            entry.published_parsed)
