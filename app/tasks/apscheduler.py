@@ -37,7 +37,7 @@ def fresh_entry():
                         try:
                             content = entry.content[0]["value"]
                         except AttributeError:
-                            content = None
+                            content = entry.summary
                         article.title = entry.title
                         article.content = content
                         article.updateddate = article_update
