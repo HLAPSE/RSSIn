@@ -56,7 +56,7 @@ class Feed(db.Model):
     title = db.Column(db.String(80), nullable=False)
     feedURL = db.Column(db.Text, nullable=False)
     link = db.Column(db.Text, nullable=False)
-    subtitle = db.Column(db.String(80))
+    subtitle = db.Column(db.String(180))
     tag = db.Column(db.String(80))
     type = db.Column(db.String(80), nullable=False)
     reachable = db.Column(db.Boolean, nullable=False)
@@ -100,6 +100,7 @@ class Read(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False)
+
     def __init__(self, entry_id):
         self.entry_id = entry_id
 
