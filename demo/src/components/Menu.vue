@@ -21,7 +21,7 @@
         v-model="state.dialog"
         direction="rtl"
         ref="drawer"
-        size="50%"
+        size="40%"
       >
         <div>
           <el-row :gutter="2">
@@ -47,13 +47,22 @@
             </el-col>
           </el-row>
           <div>
-            <el-button @click="cancelForm" size="small">取 消</el-button>
+            <el-link
+              :underline="false"
+              :href="feedinfo.feed_info.link"
+              target="_blank"
+            >
+              <h3>{{ feedinfo.feed_info.title }}</h3>
+            </el-link>
+            <el-alert title="已订阅" type="success" v-if="feedinfo.code == 12">
+            </el-alert>
             <el-select
               v-model="state.value"
               placeholder="订阅到···"
               @change="feedadd"
               size="small"
               style="width: 100px"
+              v-if="(feedinfo.code == 11) | (feedinfo.code == 22)"
             >
               <el-option
                 v-for="item in state.options"
@@ -64,6 +73,35 @@
               >
               </el-option>
             </el-select>
+            <br />
+            <div style="height: 550px">
+              <el-scrollbar>
+                <template
+                  v-for="entry in feedinfo.entries"
+                  :key="String(entry.id)"
+                >
+                  <el-card class="box-card" shadow="hover">
+                    <template #header>
+                      <div class="card-header">
+                        <span
+                          ><el-link
+                            type="info"
+                            :href="entry.link"
+                            target="_blank"
+                            :underline="false"
+                            ><h4>
+                              {{ entry.title }}
+                            </h4>
+                          </el-link></span
+                        >
+                      </div>
+                    </template>
+                    <span v-html="entry.content"></span>
+                  </el-card>
+                  <br />
+                </template>
+              </el-scrollbar>
+            </div>
           </div>
         </div>
       </el-drawer>
@@ -146,6 +184,11 @@ export default {
       value: "",
     });
     const feedurl = ref("");
+    const feedinfo = reactive({
+      code: 0,
+      feed_info: {},
+      entries: [],
+    });
     const { ctx } = getCurrentInstance();
     // 获取用户信息
     ctx.$axios
@@ -162,13 +205,6 @@ export default {
       .then((res) => {
         for (let folder of res.data.data) {
           let option = { value: folder.folder_id, label: folder.folder };
-          // if (folder.folder_id == folder_id) {
-          //   option = {
-          //     value: folder.folder_id,
-          //     label: folder.folder,
-          //     disabled: true,
-          //   };
-          // }
           state.options.push(option);
         }
       })
@@ -216,7 +252,22 @@ export default {
     // 获取订阅信息及文章
     const getfeed = () => {
       if (feedurl.value != "") {
-        console.log(feedurl.value);
+        state.loading = true;
+        ctx.$axios
+          .get("/api/feeds", {
+            params: {
+              subscription_url: feedurl.value,
+            },
+          })
+          .then((res) => {
+            feedinfo.entries = res.data.entries;
+            feedinfo.feed_info = res.data.feed_info;
+            feedinfo.code = res.data.code;
+            state.loading = false;
+          })
+          .catch((error) => {
+            ElMessage.error(error.message);
+          });
       } else {
         ElMessage.warning({
           message: "订阅链接不可为空!",
@@ -228,7 +279,20 @@ export default {
     const feedadd = () => {
       state.loading = false;
       state.dialog = false;
-      console.log(state.value, feedurl.value);
+      ctx.$axios
+        .post("/api/subscriptions", {
+          subscription_url: feedurl.value,
+          folder_id: parseInt(state.value),
+        })
+        .then(
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          })
+        )
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
     };
     return {
       state,
@@ -240,11 +304,29 @@ export default {
       feedurl,
       getfeed,
       feedadd,
+      feedinfo,
     };
   },
 };
 </script>
 <style scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  width: 80%;
+}
 </style>
 
 
