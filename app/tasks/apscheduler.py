@@ -34,24 +34,27 @@ def fresh_entry():
                     article_update = formatDatetime(entry.updated_parsed)
                     if article_update != str(article.publisheddate):
                         # 如果文章更新
-                        try:
+                        if hasattr(entry, 'content'):
                             content = entry.content[0]["value"]
-                        except AttributeError:
+                        elif hasattr(entry, 'summary'):
                             content = entry.summary
+                        else:
+                            content = None
                         article.title = entry.title
                         article.content = content
                         article.updateddate = article_update
                         db.session.commit()
                 else:
                     # 如果文章不存在
-                    try:
+                    if hasattr(entry, 'content'):
                         content = entry.content[0]["value"]
-                    except AttributeError:
+                    elif hasattr(entry, 'summary'):
                         content = entry.summary
-                    finally:
-                        feed_entry = Entry(entry.title, entry.link, content,
-                                           entry.published_parsed)
-                        feed.entries.append(feed_entry)
-                        db.session.commit()
+                    else:
+                        content = None
+                    feed_entry = Entry(entry.title, entry.link, content,
+                                       entry.published_parsed)
+                    feed.entries.append(feed_entry)
+                    db.session.commit()
             feed.updateddate = feed_updated
             db.session.commit()
