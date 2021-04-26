@@ -1,6 +1,6 @@
 <template>
-  <el-row>
-    <el-col :span="16" :offset="0">
+  <el-row :gutter="20">
+    <el-col :span="12" :offset="1">
       <el-link :underline="false" :href="state.feed_info.link" target="_blank">
         <h1 id="feed-title">{{ state.feed_info.title }}</h1>
       </el-link>
@@ -8,7 +8,7 @@
         placement="top"
         :width="160"
         v-model:visible="state.visible"
-        v-if="state.feed_id"
+        v-if="selectFeed.folder_id > 0"
       >
         <el-input
           size="mini"
@@ -39,7 +39,7 @@
       </el-popover>
       <h6 id="feed-subtitle">{{ state.feed_info.sub_title }}</h6>
     </el-col>
-    <el-col :span="8" :offset="0" class="option">
+    <el-col :span="8" :offset="1" class="option">
       <el-select
         v-model="state.value"
         placeholder="Move To ..."
@@ -66,7 +66,6 @@
       </el-col>
     </el-col>
   </el-row>
-  <br />
   <template
     v-for="(entry, index) in state.lists.filter(
       (data) =>
@@ -78,8 +77,8 @@
     <el-card class="box-card" shadow="hover">
       <template #header>
         <div class="card-header">
-          <el-row>
-            <el-col :span="15">
+          <el-row :gutter="12">
+            <el-col :span="20">
               <el-link
                 type="info"
                 :href="entry.link"
@@ -93,21 +92,21 @@
                 <span class="updateddate">{{ entry.updateddate }}</span>
               </div>
             </el-col>
-            <el-col :span="9" :offset="15">
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                circle
-                @click="state.noteinput[index] = !state.noteinput[index]"
-              ></el-button>
-              <el-button
-                type="warning"
-                icon="el-icon-star-off"
-                circle
-              ></el-button>
-              <el-button @click="readEntry(index, entry.read, entry.id)">{{
-                state.display[index] ? "收起" : "展开"
-              }}</el-button>
+            <el-col :span="4" class="btngroup">
+              <el-button-group>
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  @click="state.noteinput[index] = !state.noteinput[index]"
+                  size="small"
+                ></el-button>
+                <el-button
+                  type="warning"
+                  @click="readEntry(index, entry.read, entry.id)"
+                  size="small"
+                  >{{ state.display[index] ? "收起" : "展开" }}</el-button
+                >
+              </el-button-group>
             </el-col>
           </el-row>
         </div>
@@ -146,7 +145,6 @@
         v-html="entry.content"
       ></div>
     </el-card>
-    <br />
   </template>
   <!-- 回到顶部 -->
   <el-empty description="RSSIn" v-if="selectFeed.folder_id < 1"></el-empty>
@@ -357,8 +355,8 @@ export default {
   margin-top: 30px;
 }
 .box-card {
-  margin-left: 20px;
-  width: 70%;
+  margin: 20px auto;
+  width: 75%;
 }
 .card-header {
   background-color: #fff;
@@ -372,5 +370,8 @@ export default {
 .updateddate {
   color: #909399;
   font-size: Small;
+}
+.btngroup {
+  margin: auto;
 }
 </style>
