@@ -8,7 +8,7 @@
         placement="top"
         :width="160"
         v-model:visible="state.visible"
-        v-if="state.feed_info.id > 0"
+        v-if="state.feed_id"
       >
         <el-input
           size="mini"
@@ -61,6 +61,7 @@
           v-model="state.search"
           size="mini"
           placeholder="输入关键字搜索"
+          v-if="selectFeed.folder_id"
         />
       </el-col>
     </el-col>
