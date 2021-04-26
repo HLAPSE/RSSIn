@@ -1,16 +1,22 @@
+from collections import Counter
 from urllib.parse import urlparse as link_parse
 
+from app.models.model import Entry, Feed, Folder, FolderFeed, Read, db
+from app.resources.entry import Entries
 from feedparser import parse as feed_parse
 from flask import jsonify
 from flask_jwt_extended import current_user, jwt_required
 from flask_restful import Resource, reqparse
-from app.models.model import Feed, Folder, FolderFeed, db
 
 
 class Subscriptions(Resource):
     @jwt_required()
     def get(self):
         data = []
+        read_list = Counter([
+            Entry.query.get(read.entry_id).feed_id
+            for read in Read.query.filter_by(user_id=current_user.id).all()
+        ])
         for folder in current_user.folders:
             folder_data = {}
             folder_data["folder"] = folder.name
@@ -21,7 +27,8 @@ class Subscriptions(Resource):
                 feed_info["feed_id"] = feed_id.feed.id
                 feed_info["title"] = feed_id.feed_alias
                 # 用于获取未读订阅个数待完成
-                feed_info['conut'] = 0
+                feed_info['conut'] = len(
+                    feed_id.feed.entries) - read_list[feed_info["feed_id"]]
                 folder_list.append(feed_info)
                 folder_data["folder_list"] = folder_list
             # 修复小bug,前端需要这个列表来获取数量
