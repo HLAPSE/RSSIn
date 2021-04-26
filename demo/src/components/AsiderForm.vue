@@ -3,8 +3,7 @@
     <!-- 这里是总的和未读 -->
     <el-submenu index="0">
       <template #title>
-        <i class="el-icon-house"></i>
-        <span>ALL</span>
+        <span>🏠 ALL</span>
       </template>
       <el-menu-item index="-1">All</el-menu-item>
       <el-menu-item index="-2">Unread</el-menu-item>
@@ -19,7 +18,7 @@
         <!-- 文件夹订阅 -->
         <template v-for="feed in folder.folder_list" :key="feed.feed_id">
           <el-menu-item :index="String(feed.feed_id)">
-            <el-row :gutter="30">
+            <el-row :gutter="20">
               <el-col :span="20">{{ feed.title }}</el-col>
               <!-- 这里用于获取未读文章的个数 -->
               <el-col :span="2">{{ feed.conut }}</el-col>
@@ -30,8 +29,7 @@
     </template>
     <el-submenu index="-3">
       <template #title>
-        <i class="el-icon-s-opportunity"></i>
-        <span>推荐</span>
+        <span>🎁 推荐</span>
       </template>
       <el-menu-item index="0-1"
         >假装这有个推荐1 <i class="el-icon-circle-plus-outline"></i

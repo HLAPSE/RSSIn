@@ -1,13 +1,11 @@
 <template>
   <el-row type="flex" align="middle">
-    <el-col :span="2" id="icon">RSSIn</el-col>
+    <el-col :span="2" id="icon">📝RSSIn</el-col>
     <el-col :span="3" :offset="7">
-      <router-link to="/"><i class="el-icon-reading">阅读</i></router-link>
+      <router-link to="/">📰阅读</router-link>
     </el-col>
     <el-col :span="3" :offset="2">
-      <router-link to="/note"
-        ><i class="el-icon-collection">笔记</i></router-link
-      >
+      <router-link to="/note">📓笔记</router-link>
     </el-col>
     <el-col :span="1" :offset="4">
       <el-button
@@ -107,13 +105,8 @@
       </el-drawer>
     </el-col>
     <el-col :span="2" :offset="0">
-      <el-button
-        type="text"
-        icon="el-icon-user"
-        @click="openinfo"
-        class="user-info"
-      >
-        <span v-if="state.user.name"> Hello!{{ state.user.name }} </span>
+      <el-button type="text" @click="openinfo" class="user-info">
+        <span v-if="state.user.name"> ⚙️Hello!{{ state.user.name }} </span>
       </el-button>
       <el-dialog
         title="用户信息"
@@ -335,6 +328,7 @@ export default {
 }
 .router-link {
   color: #409eff;
+  text-decoration: none;
 }
 .router-link-active {
   text-decoration: none;

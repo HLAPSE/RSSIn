@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20">
+  <el-row>
     <el-col :span="12" :offset="1">
       <el-link :underline="false" :href="state.feed_info.link" target="_blank">
         <h1 id="feed-title">{{ state.feed_info.title }}</h1>
