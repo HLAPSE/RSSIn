@@ -36,7 +36,7 @@ class Folders(Resource):
     @jwt_required()
     def put(self):
         parser = reqparse.RequestParser()
-        parser.add_argument(' ',
+        parser.add_argument('folder_name',
                             type=str,
                             required=True,
                             help='folder_name cannot be blank!')

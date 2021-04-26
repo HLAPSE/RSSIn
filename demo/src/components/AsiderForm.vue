@@ -14,7 +14,6 @@
       <el-submenu :index="String(folder.folder_id)">
         <!-- 文件夹标题 -->
         <template #title>
-          <i class="el-icon-folder"></i>
           <span>{{ folder.folder }}</span>
         </template>
         <!-- 文件夹订阅 -->
@@ -274,5 +273,9 @@ export default {
 }
 .el-menu {
   height: 100vh;
+  background-color: #f6f7f8;
+}
+.el-menu-item {
+  background-color: #f6f7f8;
 }
 </style>
