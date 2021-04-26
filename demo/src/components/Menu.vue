@@ -1,12 +1,12 @@
 <template>
   <el-row type="flex" align="middle">
-    <el-col :span="2">RSSIn</el-col>
+    <el-col :span="2" id="icon">RSSIn</el-col>
     <el-col :span="3" :offset="7">
-      <router-link to="/"><i class="el-icon-reading">Reading</i></router-link>
+      <router-link to="/"><i class="el-icon-reading">阅读</i></router-link>
     </el-col>
     <el-col :span="3" :offset="2">
       <router-link to="/note"
-        ><i class="el-icon-collection">Notebook</i></router-link
+        ><i class="el-icon-collection">笔记</i></router-link
       >
     </el-col>
     <el-col :span="1" :offset="4">
@@ -320,12 +320,20 @@ export default {
   font-size: 14px;
 }
 
-.item {
-  margin-bottom: 18px;
-}
-
 .box-card {
   width: 80%;
+}
+#icon {
+  color: #409eff;
+  font-family: "Fantasy";
+  font-weight: bolder;
+}
+.router-link {
+  color: #409eff;
+}
+.router-link-active {
+  text-decoration: none;
+  color: #409eff;
 }
 </style>
 

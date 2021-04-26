@@ -472,4 +472,7 @@ export default {
   font-size: 14px;
   margin-bottom: 20px;
 }
+.el-header {
+  background-color: #f6f7f8;
+}
 </style>
