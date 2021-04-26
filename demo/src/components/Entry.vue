@@ -39,7 +39,7 @@
       </el-popover>
       <h6 id="feed-subtitle">{{ state.feed_info.sub_title }}</h6>
     </el-col>
-    <el-col :span="8" :offset="1" class="option">
+    <el-col :span="4" :offset="1" class="option">
       <el-select
         v-model="state.value"
         placeholder="Move To ..."
@@ -56,15 +56,14 @@
         >
         </el-option>
       </el-select>
-      <el-col :span="18" :offset="0"
-        ><el-input
-          v-model="state.search"
-          size="mini"
-          placeholder="输入关键字搜索"
-          v-if="selectFeed.folder_id"
-        />
-      </el-col>
     </el-col>
+    <el-col :span="4" :offset="0" class="option"
+      ><el-input
+        v-model="state.search"
+        size="mini"
+        placeholder="输入关键字搜索"
+        v-if="selectFeed.folder_id"
+    /></el-col>
   </el-row>
   <template
     v-for="(entry, index) in state.lists.filter(
