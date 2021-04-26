@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="16" :offset="0">
       <el-link :underline="false" :href="state.feed_info.link" target="_blank">
-        <h2>{{ state.feed_info.title }}</h2>
+        <h1 id="feed-title">{{ state.feed_info.title }}</h1>
       </el-link>
       <el-popover
         placement="top"
@@ -37,9 +37,9 @@
           ></el-button>
         </template>
       </el-popover>
-      <h5>{{ state.feed_info.sub_title }}</h5>
+      <h6 id="feed-subtitle">{{ state.feed_info.sub_title }}</h6>
     </el-col>
-    <el-col :span="8" :offset="0">
+    <el-col :span="8" :offset="0" class="option">
       <el-select
         v-model="state.value"
         placeholder="Move To ..."
@@ -345,5 +345,14 @@ export default {
 .item {
   margin-top: 10px;
   margin-right: 40px;
+}
+#feed-title {
+  color: #66b1ff;
+}
+#feed-subtitle {
+  color: #909399;
+}
+.option {
+  margin-top: 30px;
 }
 </style>
