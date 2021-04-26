@@ -107,8 +107,13 @@
       </el-drawer>
     </el-col>
     <el-col :span="2" :offset="0">
-      <el-button type="text" icon="el-icon-user" @click="openinfo">
-        Hello!{{ state.user.name }}
+      <el-button
+        type="text"
+        icon="el-icon-user"
+        @click="openinfo"
+        class="user-info"
+      >
+        <span v-if="state.user.name"> Hello!{{ state.user.name }} </span>
       </el-button>
       <el-dialog
         title="用户信息"
@@ -334,6 +339,9 @@ export default {
 .router-link-active {
   text-decoration: none;
   color: #409eff;
+}
+.user-info {
+  color: black;
 }
 </style>
 
