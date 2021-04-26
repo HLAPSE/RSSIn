@@ -66,6 +66,7 @@
       </el-col>
     </el-col>
   </el-row>
+  <br />
   <template
     v-for="(entry, index) in state.lists.filter(
       (data) =>
@@ -74,38 +75,42 @@
     )"
     :key="entry.id"
   >
-    <el-divider></el-divider>
-    <el-card class="box-card">
-      <div class="card-header">
-        <el-link
-          type="info"
-          :href="entry.link"
-          target="_blank"
-          :underline="false"
-          ><h3>
-            <el-badge is-dot class="item" :hidden="entry.read">
-              {{ entry.title }}
-            </el-badge>
-          </h3></el-link
-        >
-        <el-row>
-          <el-col :span="6" :offset="18">
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              circle
-              @click="state.noteinput[index] = !state.noteinput[index]"
-            ></el-button>
-            <el-button
-              type="warning"
-              icon="el-icon-star-off"
-              circle
-            ></el-button>
-            <el-button @click="readEntry(index, entry.read, entry.id)">{{
-              state.display[index] ? "收起" : "展开"
-            }}</el-button>
-          </el-col>
-        </el-row>
+    <el-card class="box-card" shadow="hover">
+      <template #header>
+        <div class="card-header">
+          <el-row>
+            <el-col :span="15">
+              <el-link
+                type="info"
+                :href="entry.link"
+                target="_blank"
+                :underline="false"
+                ><h3 class="entry-title" :class="{ read: entry.read }">
+                  {{ entry.title }}
+                </h3>
+              </el-link>
+              <div>
+                <span class="updateddate">{{ entry.updateddate }}</span>
+              </div>
+            </el-col>
+            <el-col :span="9" :offset="15">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                circle
+                @click="state.noteinput[index] = !state.noteinput[index]"
+              ></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-star-off"
+                circle
+              ></el-button>
+              <el-button @click="readEntry(index, entry.read, entry.id)">{{
+                state.display[index] ? "收起" : "展开"
+              }}</el-button>
+            </el-col>
+          </el-row>
+        </div>
         <div v-if="state.noteinput[index]">
           <el-row>
             <el-col :span="15">
@@ -134,14 +139,14 @@
             </el-col>
           </el-row>
         </div>
-      </div>
-      <div class="text item">
-        <li>{{ entry.updateddate }}</li>
-      </div>
-      <div v-if="state.display[index]" @mouseup="handleMouseSelect">
-        <span v-html="entry.content"></span>
-      </div>
+      </template>
+      <div
+        v-if="state.display[index]"
+        @mouseup="handleMouseSelect"
+        v-html="entry.content"
+      ></div>
     </el-card>
+    <br />
   </template>
   <!-- 回到顶部 -->
   <el-empty description="RSSIn" v-if="selectFeed.folder_id < 1"></el-empty>
@@ -342,10 +347,6 @@ export default {
 };
 </script>
 <style scoped>
-.item {
-  margin-top: 10px;
-  margin-right: 40px;
-}
 #feed-title {
   color: #66b1ff;
 }
@@ -354,5 +355,22 @@ export default {
 }
 .option {
   margin-top: 30px;
+}
+.box-card {
+  margin-left: 20px;
+  width: 70%;
+}
+.card-header {
+  background-color: #fff;
+}
+.entry-title {
+  color: black;
+}
+.read {
+  color: #888;
+}
+.updateddate {
+  color: #909399;
+  font-size: Small;
 }
 </style>
