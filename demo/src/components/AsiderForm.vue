@@ -43,7 +43,7 @@
       ></el-menu-item>
     </el-submenu>
     <!-- 管理页面按钮 -->
-    <el-affix position="top" :offset="20">
+    <el-affix position="bottom">
       <el-button
         type="primary"
         icon="el-icon-s-tools"
@@ -271,5 +271,8 @@ export default {
 .item {
   margin-top: 10px;
   margin-right: 40px;
+}
+.el-menu {
+  height: 100vh;
 }
 </style>

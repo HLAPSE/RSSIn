@@ -1,18 +1,19 @@
 <template>
-  <el-container>
-    <el-header height="40px">
-      <Menu />
-    </el-header>
-    <el-container>
-      <el-aside>
-        <!-- 这里是订阅文件夹 -->
-        <AsiderForm @feedInfo="feedInfoFun" />
-      </el-aside>
-      <el-main>
-        <Entry :selectFeed="selectFeed" />
-      </el-main>
-    </el-container>
-  </el-container>
+  <el-scrollbar
+    ><el-container>
+      <el-header height="40px">
+        <Menu />
+      </el-header>
+      <el-container>
+        <el-aside class="asi">
+          <!-- 这里是订阅文件夹 -->
+          <el-scrollbar><AsiderForm @feedInfo="feedInfoFun" /></el-scrollbar>
+        </el-aside>
+        <el-main>
+          <el-scrollbar><Entry :selectFeed="selectFeed" /></el-scrollbar>
+        </el-main>
+      </el-container> </el-container
+  ></el-scrollbar>
 </template>
 
 <script>
@@ -38,4 +39,14 @@ export default {
 };
 </script>
 <style scoped>
+.el-container > .el-container {
+  height: 100vh;
+}
+.el-header {
+  background-color: #f6f7f8;
+}
+.el-aside {
+  height: 100vh;
+  background-color: #f6f7f8;
+}
 </style>
