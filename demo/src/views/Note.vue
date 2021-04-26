@@ -169,6 +169,10 @@
               {{ item.content }}
             </el-card>
           </template>
+          <el-empty
+            description="RSSIn"
+            v-if="state.currentlist.length == 0"
+          ></el-empty>
         </el-main>
       </el-container>
     </el-container>

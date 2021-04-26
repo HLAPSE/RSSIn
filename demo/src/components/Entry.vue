@@ -144,7 +144,7 @@
     </el-card>
   </template>
   <!-- 回到顶部 -->
-  <el-empty description="正在加载" v-if="selectFeed.folder_id < 1"></el-empty>
+  <el-empty description="RSSIn" v-if="selectFeed.folder_id < 1"></el-empty>
   <el-backtop></el-backtop>
 </template>
 
