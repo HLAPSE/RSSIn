@@ -7,106 +7,113 @@
       <el-container>
         <el-aside>
           <!-- 这里是订阅文件夹 -->
-          <el-menu>
-            <template
-              v-for="folder in state.notefolders"
-              :key="folder.folder_id"
-            >
-              <el-menu-item
-                :index="String(folder.folder_id)"
-                @click="
-                  handleSelect(
-                    folder.folder_id,
-                    folder.folder_list,
-                    folder.folder
-                  )
-                "
-              >
-                {{ folder.folder }}
-              </el-menu-item>
-            </template>
-            <el-affix position="top" :offset="20">
-              <el-button
-                type="primary"
-                icon="el-icon-s-tools"
-                circle
-                @click="state.centerDialogVisible = !state.centerDialogVisible"
-              ></el-button>
-            </el-affix>
-            <!-- 笔记管理 -->
-            <el-dialog
-              title="管理笔记文件夹"
-              v-model="state.centerDialogVisible"
-              width="50%"
-              center
-            >
-              <div>
-                <el-table
-                  :data="
-                    state.notefolder.filter(
-                      (data) =>
-                        !state.search ||
-                        data.name
-                          .toLowerCase()
-                          .includes(state.search.toLowerCase())
+          <el-scrollbar>
+            <el-menu>
+              <template
+                v-for="folder in state.notefolders"
+                :key="folder.folder_id"
+                ><el-menu-item
+                  :index="String(folder.folder_id)"
+                  @click="
+                    handleSelect(
+                      folder.folder_id,
+                      folder.folder_list,
+                      folder.folder
                     )
                   "
-                  style="width: 100%"
                 >
-                  <el-table-column label="Name" prop="name"> </el-table-column>
-                  <el-table-column label="Conut" prop="note_count">
-                  </el-table-column>
-                  <el-table-column align="right">
-                    <template #header>
-                      <el-row>
-                        <el-col :span="18" :offset="0"
-                          ><el-input
-                            v-model="state.search"
-                            size="mini"
-                            placeholder="输入关键字搜索"
-                          />
-                        </el-col>
-                        <el-col :span="6" :offset="0"
-                          ><el-button
-                            size="mini"
-                            round
-                            type="primary"
-                            icon="el-icon-folder-add"
-                            @click="addfolderopen"
-                          ></el-button
-                        ></el-col>
-                      </el-row>
-                    </template>
-                    <template #default="scope">
-                      <el-button
-                        size="mini"
-                        @click="handleEdit(scope.$index, scope.row)"
-                        >Edit</el-button
-                      >
-                      <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)"
-                        >Delete</el-button
-                      >
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <template #footer>
-                <span class="dialog-footer">
-                  <el-button @click="state.centerDialogVisible = false"
-                    >取 消</el-button
-                  >
-                  <el-button
-                    type="primary"
-                    @click="state.centerDialogVisible = false"
-                    >确 定</el-button
-                  >
-                </span>
+                  <el-row :gutter="20">
+                    <el-col :span="20">{{ folder.folder }}</el-col>
+                    <el-col :span="4">{{ folder.folder_list.length }}</el-col>
+                  </el-row>
+                </el-menu-item>
               </template>
-            </el-dialog>
-          </el-menu>
+              <el-affix position="top" :offset="20">
+                <el-button
+                  type="primary"
+                  icon="el-icon-s-tools"
+                  circle
+                  @click="
+                    state.centerDialogVisible = !state.centerDialogVisible
+                  "
+                ></el-button>
+              </el-affix>
+              <!-- 笔记管理 -->
+              <el-dialog
+                title="管理笔记文件夹"
+                v-model="state.centerDialogVisible"
+                width="50%"
+                center
+              >
+                <div>
+                  <el-table
+                    :data="
+                      state.notefolder.filter(
+                        (data) =>
+                          !state.search ||
+                          data.name
+                            .toLowerCase()
+                            .includes(state.search.toLowerCase())
+                      )
+                    "
+                    style="width: 100%"
+                  >
+                    <el-table-column label="Name" prop="name">
+                    </el-table-column>
+                    <el-table-column label="Conut" prop="note_count">
+                    </el-table-column>
+                    <el-table-column align="right">
+                      <template #header>
+                        <el-row>
+                          <el-col :span="18" :offset="0"
+                            ><el-input
+                              v-model="state.search"
+                              size="mini"
+                              placeholder="输入关键字搜索"
+                            />
+                          </el-col>
+                          <el-col :span="6" :offset="0"
+                            ><el-button
+                              size="mini"
+                              round
+                              type="primary"
+                              icon="el-icon-folder-add"
+                              @click="addfolderopen"
+                            ></el-button
+                          ></el-col>
+                        </el-row>
+                      </template>
+                      <template #default="scope">
+                        <el-button
+                          size="mini"
+                          @click="handleEdit(scope.$index, scope.row)"
+                          >Edit</el-button
+                        >
+                        <el-button
+                          size="mini"
+                          type="danger"
+                          @click="handleDelete(scope.$index, scope.row)"
+                          >Delete</el-button
+                        >
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </div>
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="state.centerDialogVisible = false"
+                      >取 消</el-button
+                    >
+                    <el-button
+                      type="primary"
+                      @click="state.centerDialogVisible = false"
+                      >确 定</el-button
+                    >
+                  </span>
+                </template>
+              </el-dialog>
+            </el-menu></el-scrollbar
+          >
         </el-aside>
         <el-main>
           <!-- 这里是笔记 -->

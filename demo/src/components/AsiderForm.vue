@@ -19,9 +19,11 @@
         <!-- 文件夹订阅 -->
         <template v-for="feed in folder.folder_list" :key="feed.feed_id">
           <el-menu-item :index="String(feed.feed_id)">
-            <el-badge :value="12" class="item">
-              {{ feed.title }}
-            </el-badge></el-menu-item
+            <el-row :gutter="30">
+              <el-col :span="20">{{ feed.title }}</el-col>
+              <!-- 这里用于获取未读文章的个数 -->
+              <el-col :span="2">{{ feed.conut }}</el-col>
+            </el-row></el-menu-item
           >
         </template>
       </el-submenu>
@@ -144,6 +146,7 @@ export default {
       .get("/api/subscriptions")
       .then((res) => {
         state.folders = res.data.data;
+        console.log(res.data.data);
       })
       .catch((error) => {
         ElMessage.error(error.message);

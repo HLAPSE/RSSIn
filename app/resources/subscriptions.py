@@ -20,6 +20,8 @@ class Subscriptions(Resource):
                 feed_info = {}
                 feed_info["feed_id"] = feed_id.feed.id
                 feed_info["title"] = feed_id.feed_alias
+                # 用于获取未读订阅个数待完成
+                feed_info['conut'] = 0
                 folder_list.append(feed_info)
                 folder_data["folder_list"] = folder_list
             # 修复小bug,前端需要这个列表来获取数量
