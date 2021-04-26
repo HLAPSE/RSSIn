@@ -27,6 +27,8 @@ class Notes(Resource):
                 note_info['entry_info'] = entry_info
                 folder_list.append(note_info)
                 folder_data["folder_list"] = folder_list
+            if not folder_list:
+                folder_data["folder_list"] = folder_list
             data.append(folder_data)
         return jsonify(data=data)
 

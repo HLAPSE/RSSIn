@@ -12,7 +12,8 @@
               <template
                 v-for="folder in state.notefolders"
                 :key="folder.folder_id"
-                ><el-menu-item
+              >
+                <el-menu-item
                   :index="String(folder.folder_id)"
                   @click="
                     handleSelect(
@@ -28,7 +29,7 @@
                   </el-row>
                 </el-menu-item>
               </template>
-              <el-affix position="top" :offset="20">
+              <el-affix position="bottom" :offset="20">
                 <el-button
                   type="primary"
                   icon="el-icon-s-tools"
@@ -117,60 +118,68 @@
         </el-aside>
         <el-main>
           <!-- 这里是笔记 -->
-          {{ state.currentfoldername }}
+          <el-row>
+            <el-col :span="12" :offset="2"
+              ><h1>{{ state.currentfoldername }}</h1></el-col
+            >
+          </el-row>
           <template v-for="item in state.currentlist" :key="item.note_id">
-            <el-divider></el-divider>
             <el-card class="box-card">
               <template #header>
                 <div class="card-header">
-                  <el-link
-                    type="primary"
-                    :href="item.entry_info.link"
-                    target="_blank"
-                    :underline="false"
-                    >{{ item.entry_info.title }}</el-link
-                  >
-                  <div>
-                    <el-dropdown trigger="click" @command="handleCommand">
-                      <span class="el-dropdown-link">
-                        更改文件夹<i
-                          class="el-icon-arrow-down el-icon--right"
-                        ></i>
-                      </span>
-                      <template #dropdown>
-                        <el-dropdown-menu
-                          v-for="folder in state.notefolder"
-                          :key="folder.id"
-                        >
-                          <el-dropdown-item
-                            v-if="folder.id != state.currentfolder"
-                            :command="String(folder.id + ' ' + item.note_id)"
+                  <el-row :gutter="20">
+                    <el-col :span="18" :offset="0"
+                      ><el-link
+                        type="primary"
+                        :href="item.entry_info.link"
+                        target="_blank"
+                        :underline="false"
+                        >{{ item.entry_info.title }}</el-link
+                      ></el-col
+                    >
+                    <el-col :span="6" :offset="0"
+                      ><el-dropdown trigger="click" @command="handleCommand">
+                        <span class="el-dropdown-link">
+                          更改文件夹<i
+                            class="el-icon-arrow-down el-icon--right"
+                          ></i>
+                        </span>
+                        <template #dropdown>
+                          <el-dropdown-menu
+                            v-for="folder in state.notefolder"
+                            :key="folder.id"
                           >
-                            {{ folder.name }}
-                          </el-dropdown-item>
-                          <el-dropdown-item
-                            v-else
-                            disabled
-                            :command="String(folder.id + ' ' + item.note_id)"
-                          >
-                            {{ folder.name }}
-                          </el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
-                    <el-button
-                      type="primary"
-                      icon="el-icon-edit"
-                      circle
-                      @click="opendialog(item.content, item)"
-                    ></el-button>
-                    <el-button
-                      type="danger"
-                      icon="el-icon-delete"
-                      circle
-                      @click="deletenote(item.note_id)"
-                    ></el-button>
-                  </div>
+                            <el-dropdown-item
+                              v-if="folder.id != state.currentfolder"
+                              :command="String(folder.id + ' ' + item.note_id)"
+                            >
+                              {{ folder.name }}
+                            </el-dropdown-item>
+                            <el-dropdown-item
+                              v-else
+                              disabled
+                              :command="String(folder.id + ' ' + item.note_id)"
+                            >
+                              {{ folder.name }}
+                            </el-dropdown-item>
+                          </el-dropdown-menu>
+                        </template>
+                      </el-dropdown>
+                      <el-button-group class="btngroup"
+                        ><el-button
+                          type="primary"
+                          icon="el-icon-edit"
+                          @click="opendialog(item.content, item)"
+                          size="small"
+                        ></el-button>
+                        <el-button
+                          type="danger"
+                          icon="el-icon-delete"
+                          @click="deletenote(item.note_id)"
+                          size="small"
+                        ></el-button></el-button-group
+                    ></el-col>
+                  </el-row>
                 </div>
               </template>
               {{ item.content }}
@@ -247,14 +256,6 @@ export default {
         ElMessage.error(error.message);
       });
     // 用来获取笔记文件夹
-    ctx.$axios
-      .get("/api/notefolders")
-      .then((res) => {
-        state.notefolder = res.data.data;
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
     const handleSelect = (key, lists, name) => {
       state.currentfolder = parseInt(key);
       state.currentlist = lists;
@@ -270,6 +271,7 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    freshnotefolder();
     const deletenote = (id) => {
       ctx.$axios
         .delete("/api/notes", {
@@ -457,12 +459,6 @@ export default {
 };
 </script>
 <style scoped>
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .text {
   font-size: 14px;
 }
@@ -471,9 +467,10 @@ export default {
   margin-bottom: 18px;
 }
 
-/* .box-card {
-  width: 480px;
-} */
+.box-card {
+  margin: 20px auto;
+  width: 75%;
+}
 /* 下拉菜单样式 */
 .el-dropdown-link {
   cursor: pointer;
@@ -497,5 +494,8 @@ export default {
 }
 .el-menu-item {
   background-color: #f6f7f8;
+}
+.btngroup {
+  margin: auto;
 }
 </style>
