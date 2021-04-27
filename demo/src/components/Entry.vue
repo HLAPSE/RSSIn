@@ -166,7 +166,7 @@
   <el-empty
     description="RSSIn"
     v-if="selectFeed.folder_id < 1"
-    image-size="240"
+    :image-size="240"
   ></el-empty>
   <el-backtop></el-backtop>
 </template>

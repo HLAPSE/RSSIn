@@ -188,7 +188,7 @@
           <el-empty
             description="RSSIn"
             v-if="state.currentlist.length == 0"
-            image-size="240"
+            :image-size="240"
           ></el-empty>
         </el-main>
       </el-container>

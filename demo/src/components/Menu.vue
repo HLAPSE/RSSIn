@@ -50,6 +50,11 @@
           </el-button>
         </el-col>
       </el-row>
+      <el-empty
+        description="订阅出错或为空！"
+        v-if="feedinfo.code == 0"
+        :image-size="120"
+      ></el-empty>
       <div>
         <el-row>
           <el-col :span="12" :offset="2"
