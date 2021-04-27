@@ -124,13 +124,13 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="name" prop="name">
+      <el-form-item label="账号" prop="name">
         <el-input
           v-model="ruleForm.name"
           :placeholder="state.user.name"
         ></el-input>
       </el-form-item>
-      <el-form-item label="email" prop="email">
+      <el-form-item label="邮箱" prop="email">
         <el-input
           type="email"
           v-model="ruleForm.email"
@@ -191,30 +191,34 @@ export default {
     });
     const { ctx } = getCurrentInstance();
     // 获取用户信息
-    ctx.$axios
-      .get("/api/users")
-      .then((res) => {
-        state.user = res.data;
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
+    const getuserinfo = () => {
+      ctx.$axios
+        .get("/api/users")
+        .then((res) => {
+          state.user = res.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     // 获取订阅文件夹
-    ctx.$axios
-      .get("/api/subscriptions")
-      .then((res) => {
-        for (let folder of res.data.data) {
-          let option = { value: folder.folder_id, label: folder.folder };
-          state.options.push(option);
-        }
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
+    const getfolderinfo = () => {
+      ctx.$axios
+        .get("/api/subscriptions")
+        .then((res) => {
+          for (let folder of res.data.data) {
+            let option = { value: folder.folder_id, label: folder.folder };
+            state.options.push(option);
+          }
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     const submitForm = () => {
-      if ((ruleForm.name == "") | ruleForm.email) {
+      if ((ruleForm.name == "") | (ruleForm.email == "")) {
         ElMessage.warning({
-          message: "邮箱或用户名不可为空!",
+          message: "邮箱或账号不可为空!",
           type: "warning",
         });
         return;
@@ -231,6 +235,7 @@ export default {
             message: res.data.message,
             type: "success",
           });
+          getuserinfo();
         })
         .catch((error) => {
           ElMessage.error(error.message);
@@ -244,10 +249,6 @@ export default {
       ruleForm.name = "";
       ruleForm.email = "";
       state.centerDialogVisible = true;
-    };
-    const cancelForm = () => {
-      state.loading = false;
-      state.dialog = false;
     };
     // 获取订阅信息及文章
     const getfeed = () => {
@@ -294,13 +295,14 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    getuserinfo();
+    getfolderinfo();
     return {
       state,
       ruleForm,
       submitForm,
       resetForm,
       openinfo,
-      cancelForm,
       feedurl,
       getfeed,
       feedadd,
