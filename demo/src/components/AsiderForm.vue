@@ -123,7 +123,7 @@
 <script>
 import { getCurrentInstance } from "vue";
 import { reactive } from "vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElLoading } from "element-plus";
 export default {
   props: {},
   setup(props, context) {
@@ -140,15 +140,19 @@ export default {
         feed_id: parseInt(keyPath),
       });
     };
-    ctx.$axios
-      .get("/api/subscriptions")
-      .then((res) => {
-        state.folders = res.data.data;
-        console.log(res.data.data);
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
+    let loading;
+    const startLoading = () => {
+      const options = {
+        lock: true,
+        text: "loading...",
+        background: "rgba(0,0,0,0.7)",
+      };
+      loading = ElLoading.service(options);
+    };
+
+    const endLoading = () => {
+      loading.close();
+    };
     const addfolderopen = () => {
       ctx
         .$prompt("请输入名称", "", {
@@ -191,10 +195,12 @@ export default {
         });
     };
     const freshfolder = () => {
+      startLoading();
       ctx.$axios
         .get("/api/subscriptions")
         .then((res) => {
           state.folders = res.data.data;
+          endLoading();
         })
         .catch((error) => {
           ElMessage.error(error.message);
@@ -262,6 +268,7 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    freshfolder();
     return { state, handleSelect, addfolderopen, handleDelete, handleEdit };
   },
 };
