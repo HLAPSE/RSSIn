@@ -147,10 +147,17 @@
         </div>
       </template>
       <div
+        class="entry-content"
+        :class="{
+          bilibili: entry.type == 'space.bilibili.com',
+          zhihu: entry.type == 'www.zhihu.com',
+          bing: entry.type == 'cn.bing.com',
+          epic: entry.type == 'www.epicgames.com',
+          weibo: entry.type == 'weibo.com',
+        }"
         v-if="state.display[index]"
         @mouseup="handleMouseSelect"
         v-html="entry.content"
-        class="entry-content"
       ></div>
     </el-card>
   </template>
@@ -165,7 +172,7 @@
 
 <script>
 // import {} from "@vue/composition-api";
-import { getCurrentInstance, watch, reactive, h } from "vue";
+import { getCurrentInstance, watch, reactive } from "vue";
 import { ElMessage } from "element-plus";
 
 export default {
