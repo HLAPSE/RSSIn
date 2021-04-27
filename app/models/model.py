@@ -53,7 +53,7 @@ class Folder(db.Model):
 class Feed(db.Model):
     #: 订阅源id、标题、订阅链接、链接、子标题、分类(用于推荐)、类型(用于分类展示)、已更新位置、可用（可达）、最后更新时间
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), nullable=False)
+    title = db.Column(db.String(180), nullable=False)
     feedURL = db.Column(db.Text, nullable=False)
     link = db.Column(db.Text, nullable=False)
     subtitle = db.Column(db.String(180))
@@ -79,7 +79,7 @@ class Feed(db.Model):
 class Entry(db.Model):
     #: 文章id、标题、链接、发布日期、内容、订阅源id
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), unique=False, nullable=False)
+    title = db.Column(db.String(180), unique=False, nullable=False)
     link = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text)
     updateddate = db.Column(db.DateTime,
