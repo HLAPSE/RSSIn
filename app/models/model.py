@@ -4,6 +4,7 @@ from app.common.util import formatDatetime
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import safe_str_cmp
+from sqlalchemy.dialects.mysql import LONGTEXT
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -81,7 +82,7 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(180), unique=False, nullable=False)
     link = db.Column(db.Text, nullable=False)
-    content = db.Column(db.Text)
+    content = db.Column(LONGTEXT)
     updateddate = db.Column(db.DateTime,
                             default=datetime.now,
                             onupdate=datetime.now)
