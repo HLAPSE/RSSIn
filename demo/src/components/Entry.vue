@@ -354,7 +354,7 @@ export default {
 </script>
 <style scoped>
 #feed-title {
-  color: #66b1ff;
+  color: #cc6666;
 }
 #feed-subtitle {
   color: #909399;
