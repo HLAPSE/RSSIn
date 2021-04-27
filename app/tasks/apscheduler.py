@@ -6,7 +6,7 @@ from flask_apscheduler import APScheduler
 scheduler = APScheduler()
 
 
-@scheduler.task('interval', id='title', minutes=1, misfire_grace_time=900)
+@scheduler.task('interval', id='title', minutes=5, misfire_grace_time=900)
 def fresh_feed_info():
 
     feed_list = [feed for feed in Feed.query.all()]
@@ -17,7 +17,7 @@ def fresh_feed_info():
             db.session.commit()
 
 
-@scheduler.task('interval', id='fresh_entry', minutes=1)
+@scheduler.task('interval', id='fresh_entry', minutes=5)
 def fresh_entry():
     # 这个任务用于定时刷新文章
     # 如果订阅源未更新，则下一个
