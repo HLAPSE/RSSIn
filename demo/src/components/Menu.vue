@@ -14,53 +14,64 @@
         icon="el-icon-plus"
         @click="state.dialog = true"
       ></el-button>
-      <el-drawer
-        title="添加订阅"
-        v-model="state.dialog"
-        direction="rtl"
-        ref="drawer"
-        size="40%"
-      >
-        <div>
-          <el-row :gutter="2">
-            <el-col :span="16" :offset="1"
-              ><el-input
-                placeholder="请输入订阅链接···"
-                v-model="feedurl"
-                clearable
-                size="small"
-              >
-              </el-input
-            ></el-col>
-            <el-col :span="4" :offset="1">
-              <el-button
-                type="success"
-                @click="getfeed"
-                :loading="state.loading"
-                round
-                size="small"
-              >
-                {{ state.loading ? "提交中 ..." : "确 定" }}
-              </el-button>
-            </el-col>
-          </el-row>
-          <div>
-            <el-link
+    </el-col>
+    <el-col :span="2" :offset="0">
+      <el-button type="text" @click="openinfo" class="user-info">
+        <span v-if="state.user.name"> ⚙️Hello!{{ state.user.name }} </span>
+      </el-button>
+    </el-col>
+  </el-row>
+  <el-drawer
+    title="添加订阅"
+    v-model="state.dialog"
+    direction="rtl"
+    ref="drawer"
+  >
+    <div>
+      <el-row :gutter="2">
+        <el-col :span="16" :offset="1"
+          ><el-input
+            placeholder="请输入订阅链接···"
+            v-model="feedurl"
+            clearable
+            size="small"
+          >
+          </el-input
+        ></el-col>
+        <el-col :span="4" :offset="1">
+          <el-button
+            type="success"
+            @click="getfeed"
+            :loading="state.loading"
+            round
+            size="small"
+          >
+            {{ state.loading ? "提交中 ..." : "确 定" }}
+          </el-button>
+        </el-col>
+      </el-row>
+      <div>
+        <el-row>
+          <el-col :span="12" :offset="2"
+            ><el-link
               :underline="false"
               :href="feedinfo.feed_info.link"
               target="_blank"
             >
-              <h3>{{ feedinfo.feed_info.title }}</h3>
+              <h2 id="feed-title">{{ feedinfo.feed_info.title }}</h2>
             </el-link>
-            <el-alert title="已订阅" type="success" v-if="feedinfo.code == 12">
-            </el-alert>
+          </el-col>
+          <el-col
+            :span="4"
+            v-if="(feedinfo.code == 11) | (feedinfo.code == 22)"
+            class="option"
+          >
             <el-select
               v-model="state.value"
               placeholder="订阅到···"
               @change="feedadd"
               size="small"
               style="width: 100px"
-              v-if="(feedinfo.code == 11) | (feedinfo.code == 22)"
             >
               <el-option
                 v-for="item in state.options"
@@ -69,98 +80,85 @@
                 :value="item.value"
                 :disabled="item.disabled"
               >
-              </el-option>
-            </el-select>
-            <br />
-            <div style="height: 550px">
-              <el-scrollbar>
-                <template
-                  v-for="entry in feedinfo.entries"
-                  :key="String(entry.id)"
+              </el-option></el-select
+          ></el-col>
+        </el-row>
+        <el-alert title="已订阅" type="success" v-if="feedinfo.code == 12">
+        </el-alert>
+        <div style="height: 600px">
+          <el-scrollbar>
+            <template v-for="entry in feedinfo.entries" :key="String(entry.id)">
+              <el-card class="box-card" shadow="hover">
+                <template #header
+                  ><el-link
+                    type="info"
+                    :href="entry.link"
+                    target="_blank"
+                    :underline="false"
+                    ><h4>
+                      {{ entry.title }}
+                    </h4>
+                  </el-link></template
                 >
-                  <el-card class="box-card" shadow="hover">
-                    <template #header>
-                      <div class="card-header">
-                        <span
-                          ><el-link
-                            type="info"
-                            :href="entry.link"
-                            target="_blank"
-                            :underline="false"
-                            ><h4>
-                              {{ entry.title }}
-                            </h4>
-                          </el-link></span
-                        >
-                      </div>
-                    </template>
-                  </el-card>
-                  <br />
-                </template>
-              </el-scrollbar>
-            </div>
-          </div>
+              </el-card>
+            </template>
+          </el-scrollbar>
         </div>
-      </el-drawer>
-    </el-col>
-    <el-col :span="2" :offset="0">
-      <el-button type="text" @click="openinfo" class="user-info">
-        <span v-if="state.user.name"> ⚙️Hello!{{ state.user.name }} </span>
-      </el-button>
-      <el-dialog
-        title="用户信息"
-        v-model="state.centerDialogVisible"
-        width="30%"
-        center
-      >
-        <el-form
-          :model="ruleForm"
-          status-icon
-          label-width="100px"
-          class="demo-ruleForm"
-        >
-          <el-form-item label="name" prop="name">
-            <el-input
-              v-model="ruleForm.name"
-              :placeholder="state.user.name"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="email" prop="email">
-            <el-input
-              type="email"
-              v-model="ruleForm.email"
-              :placeholder="state.user.email"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入邮箱地址',
-                  trigger: 'blur',
-                },
-                {
-                  type: 'email',
-                  message: '请输入正确的邮箱地址',
-                  trigger: ['blur', 'change'],
-                },
-              ]"
-            ></el-input>
-          </el-form-item>
-          <!-- 密码输入不做了 -->
-          <!-- <el-form-item label="passwd" prop="passwd">
+      </div>
+    </div>
+  </el-drawer>
+  <el-dialog
+    title="用户信息"
+    v-model="state.centerDialogVisible"
+    width="30%"
+    center
+  >
+    <el-form
+      :model="ruleForm"
+      status-icon
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="name" prop="name">
+        <el-input
+          v-model="ruleForm.name"
+          :placeholder="state.user.name"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="email" prop="email">
+        <el-input
+          type="email"
+          v-model="ruleForm.email"
+          :placeholder="state.user.email"
+          :rules="[
+            {
+              required: true,
+              message: '请输入邮箱地址',
+              trigger: 'blur',
+            },
+            {
+              type: 'email',
+              message: '请输入正确的邮箱地址',
+              trigger: ['blur', 'change'],
+            },
+          ]"
+        ></el-input>
+      </el-form-item>
+      <!-- 密码输入不做了 -->
+      <!-- <el-form-item label="passwd" prop="passwd">
               <el-input
                 v-model.number="ruleForm.passwd"
                 placeholder="Enter the passwd"
               ></el-input>
             </el-form-item> -->
-          <el-form-item>
-            <span class="dialog-footer">
-              <el-button @click="resetForm">取 消</el-button>
-              <el-button type="primary" @click="submitForm">确 定</el-button>
-            </span></el-form-item
-          >
-        </el-form>
-      </el-dialog>
-    </el-col>
-  </el-row>
+      <el-form-item>
+        <span class="dialog-footer">
+          <el-button @click="resetForm">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+        </span></el-form-item
+      >
+    </el-form>
+  </el-dialog>
 </template>
 <script>
 import { reactive, getCurrentInstance, ref } from "vue";
@@ -307,18 +305,12 @@ export default {
 };
 </script>
 <style scoped>
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .text {
   font-size: 14px;
 }
-
 .box-card {
-  width: 80%;
+  margin: 10px auto;
+  width: 75%;
 }
 #icon {
   color: #409eff;
@@ -335,6 +327,18 @@ export default {
 }
 .user-info {
   color: black;
+}
+#feed-title {
+  color: #cc6666;
+}
+.option {
+  margin: auto;
+}
+.el-drawer {
+  size: 30%;
+}
+.box-card /deep/ .el-card__header {
+  background-color: #f6f7f899;
 }
 </style>
 
