@@ -94,13 +94,13 @@
             <el-col :span="4" class="btngroup">
               <el-button-group>
                 <el-button
-                  type="primary"
+                  type="edit"
                   icon="el-icon-edit"
                   @click="state.noteinput[index] = !state.noteinput[index]"
                   size="small"
                 ></el-button>
                 <el-button
-                  type="warning"
+                  type="goon"
                   @click="readEntry(index, entry.read, entry.id)"
                   size="small"
                   >{{ state.display[index] ? "收起" : "展开" }}</el-button
@@ -142,6 +142,7 @@
         v-if="state.display[index]"
         @mouseup="handleMouseSelect"
         v-html="entry.content"
+        class="entry-content"
       ></div>
     </el-card>
   </template>
@@ -372,5 +373,45 @@ export default {
 }
 .btngroup {
   margin: auto;
+}
+.entry-content {
+}
+.el-button--edit.is-active,
+.el-button--edit:active {
+  background: #ff9966;
+  border-color: #ff9966;
+  color: #fff;
+}
+
+.el-button--edit:focus,
+.el-button--edit:hover {
+  background: #ffcccc;
+  border-color: #ffcccc;
+  color: #fff;
+}
+
+.el-button--edit {
+  color: #fff;
+  background-color: #ff9966;
+  border-color: #ff9966;
+}
+.el-button--goon.is-active,
+.el-button--goon:active {
+  background: #20b2aa;
+  border-color: #20b2aa;
+  color: #fff;
+}
+
+.el-button--goon:focus,
+.el-button--goon:hover {
+  background: #48d1cc;
+  border-color: #48d1cc;
+  color: #fff;
+}
+
+.el-button--goon {
+  color: #fff;
+  background-color: #20b2aa;
+  border-color: #20b2aa;
 }
 </style>
