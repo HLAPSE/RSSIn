@@ -73,7 +73,17 @@
     )"
     :key="entry.id"
   >
-    <el-card class="box-card" shadow="hover">
+    <el-card
+      class="box-card"
+      shadow="hover"
+      :class="{
+        bilibili: entry.type == 'space.bilibili.com',
+        zhihu: entry.type == 'www.zhihu.com',
+        bing: entry.type == 'cn.bing.com',
+        epic: entry.type == 'www.epicgames.com',
+        weibo: entry.type == 'weibo.com',
+      }"
+    >
       <template #header>
         <div class="card-header">
           <el-row :gutter="12">
@@ -148,13 +158,6 @@
       </template>
       <div
         class="entry-content"
-        :class="{
-          bilibili: entry.type == 'space.bilibili.com',
-          zhihu: entry.type == 'www.zhihu.com',
-          bing: entry.type == 'cn.bing.com',
-          epic: entry.type == 'www.epicgames.com',
-          weibo: entry.type == 'weibo.com',
-        }"
         v-if="state.display[index]"
         @mouseup="handleMouseSelect"
         v-html="entry.content"
