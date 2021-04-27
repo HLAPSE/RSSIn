@@ -109,30 +109,38 @@
             </el-col>
           </el-row>
         </div>
-        <div v-if="state.noteinput[index]">
-          <el-row>
-            <el-col :span="15">
+        <div v-show="state.noteinput[index]" class="edit-area">
+          <el-row :gutter="20">
+            <el-col :span="12" offset="2">
               <el-input
                 type="textarea"
-                placeholder="Enter something"
-                :autosize="{ minRows: 2, maxRows: 4 }"
+                placeholder="记点东西吧！"
+                :autosize="{ minRows: 1, maxRows: 3 }"
                 v-model="state.note[index]"
               ></el-input>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :offset="9">
-              <el-select v-model="state.notefoldid" placeholder="请选择">
-                <el-option
-                  v-for="item in state.notefolders"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
+            <el-col :span="9" offset="1" class="btngroup">
+              <el-col :span="15" :offset="0">
+                <el-select
+                  v-model="state.notefoldid"
+                  placeholder="选择标签"
+                  size="small"
                 >
-                </el-option>
-              </el-select>
-              <el-button type="primary" @click="addNote(entry.id, index)"
-                >确定</el-button
+                  <el-option
+                    v-for="item in state.notefolders"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option> </el-select
+              ></el-col>
+              <el-col :span="9" :offset="0"
+                ><el-button
+                  type="primary"
+                  @click="addNote(entry.id, index)"
+                  size="small"
+                  >确定</el-button
+                ></el-col
               >
             </el-col>
           </el-row>
@@ -413,5 +421,8 @@ export default {
   color: #fff;
   background-color: #20b2aa;
   border-color: #20b2aa;
+}
+.edit-area {
+  margin: 2em auto 1em;
 }
 </style>
