@@ -85,40 +85,38 @@
       }"
     >
       <template #header>
-        <div class="card-header">
-          <el-row :gutter="12">
-            <el-col :span="20">
-              <el-link
-                type="info"
-                :href="entry.link"
-                target="_blank"
-                :underline="false"
-                ><h3 class="entry-title" :class="{ read: entry.read }">
-                  {{ entry.title }}
-                </h3>
-              </el-link>
-              <div>
-                <span class="updateddate">{{ entry.updateddate }}</span>
-              </div>
-            </el-col>
-            <el-col :span="4" class="btngroup">
-              <el-button-group>
-                <el-button
-                  type="edit"
-                  icon="el-icon-edit"
-                  @click="state.noteinput[index] = !state.noteinput[index]"
-                  size="small"
-                ></el-button>
-                <el-button
-                  type="goon"
-                  @click="readEntry(index, entry.read, entry.id)"
-                  size="small"
-                  >{{ state.display[index] ? "收起" : "展开" }}</el-button
-                >
-              </el-button-group>
-            </el-col>
-          </el-row>
-        </div>
+        <el-row :gutter="12">
+          <el-col :span="20">
+            <el-link
+              type="info"
+              :href="entry.link"
+              target="_blank"
+              :underline="false"
+              ><h3 class="entry-title" :class="{ read: entry.read }">
+                {{ entry.title }}
+              </h3>
+            </el-link>
+            <div>
+              <span class="updateddate">{{ entry.updateddate }}</span>
+            </div>
+          </el-col>
+          <el-col :span="4" class="btngroup">
+            <el-button-group>
+              <el-button
+                type="edit"
+                icon="el-icon-edit"
+                @click="state.noteinput[index] = !state.noteinput[index]"
+                size="small"
+              ></el-button>
+              <el-button
+                type="goon"
+                @click="readEntry(index, entry.read, entry.id)"
+                size="small"
+                >{{ state.display[index] ? "收起" : "展开" }}</el-button
+              >
+            </el-button-group>
+          </el-col>
+        </el-row>
         <div v-show="state.noteinput[index]" class="edit-area">
           <el-row :gutter="20">
             <el-col :span="12" offset="2">
@@ -380,8 +378,23 @@ export default {
   margin: 20px auto;
   width: 75%;
 }
-.card-header {
-  background-color: #fff;
+.box-card /deep/ .el-card__header {
+  background-color: #f6f7f899;
+}
+.bilibili /deep/ .el-card__header {
+  background-color: #f1729d10;
+}
+.zhihu /deep/ .el-card__header {
+  background-color: #0064fa10;
+}
+.weibo /deep/ .el-card__header {
+  background-color: #eb735010;
+}
+.bing /deep/ .el-card__header {
+  background-color: #ffc20e10;
+}
+.epic /deep/ .el-card__header {
+  background-color: #00000010;
 }
 .entry-title {
   color: black;
