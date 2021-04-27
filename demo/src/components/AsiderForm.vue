@@ -51,7 +51,7 @@
       ></el-button>
     </el-affix>
     <el-dialog
-      title="管理订阅文件夹"
+      title="管理订阅分组"
       v-model="state.centerDialogVisible"
       width="50%"
       center
@@ -67,8 +67,8 @@
           "
           style="width: 100%"
         >
-          <el-table-column label="Name" prop="folder"> </el-table-column>
-          <el-table-column label="Conut" prop="folder_list.length">
+          <el-table-column label="分组" prop="folder"> </el-table-column>
+          <el-table-column label="数量" prop="folder_list.length">
           </el-table-column>
           <el-table-column align="right">
             <template #header>
@@ -95,13 +95,13 @@
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)"
-                >Edit</el-button
+                >编辑</el-button
               >
               <el-button
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
-                >Delete</el-button
+                >删除</el-button
               >
             </template>
           </el-table-column>
@@ -149,7 +149,6 @@ export default {
       };
       loading = ElLoading.service(options);
     };
-
     const endLoading = () => {
       loading.close();
     };
@@ -161,7 +160,6 @@ export default {
         })
         .then(({ value }) => {
           if (value) {
-            console.log(value);
             addnotefold(value);
           } else {
             ctx.$message({
