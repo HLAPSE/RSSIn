@@ -280,7 +280,11 @@ export default {
           });
           freshnote();
           freshnotefolder();
-          console.log(state.notefolder);
+          // 删除当前笔记
+          state.currentlist.splice(
+            state.currentlist.findIndex((item) => item.note_id === id),
+            1
+          );
         })
         .catch((error) => {
           ElMessage.error(error.message);
