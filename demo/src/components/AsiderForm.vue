@@ -47,7 +47,7 @@
     <el-affix position="bottom" :offset="20">
       <el-button
         type="primary"
-        icon="el-icon-s-tools"
+        icon="el-icon-folder"
         circle
         @click="state.centerDialogVisible = !state.centerDialogVisible"
       ></el-button>
