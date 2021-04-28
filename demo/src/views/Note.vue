@@ -221,7 +221,6 @@ export default {
   components: { Menu },
   setup() {
     const state = reactive({
-      user: {},
       currentlist: [],
       currentfolder: 0,
       currentfoldername: "",
@@ -234,25 +233,21 @@ export default {
       // 笔记管理显示
       centerDialogVisible: false,
       search: "",
+      updatelist: [],
     });
     const { ctx } = getCurrentInstance();
-    ctx.$axios
-      .get("/api/users")
-      .then((res) => {
-        state.user = res.data;
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
     // 用来获取笔记
-    ctx.$axios
-      .get("/api/notes")
-      .then((res) => {
-        state.notefolders = res.data.data;
-      })
-      .catch((error) => {
-        ElMessage.error(error.message);
-      });
+    const freshnote = () => {
+      ctx.$axios
+        .get("/api/notes")
+        .then((res) => {
+          state.notefolders = res.data.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
+
     // 用来获取笔记文件夹
     const handleSelect = (key, lists, name) => {
       state.currentfolder = parseInt(key);
@@ -269,6 +264,7 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    freshnote();
     freshnotefolder();
     const deletenote = (id) => {
       ctx.$axios
@@ -282,6 +278,9 @@ export default {
             message: res.data.message,
             type: "success",
           });
+          freshnote();
+          freshnotefolder();
+          console.log(state.notefolder);
         })
         .catch((error) => {
           ElMessage.error(error.message);
@@ -481,5 +480,8 @@ export default {
 }
 .btngroup {
   margin: auto;
+}
+.el-container > .el-container {
+  height: 94vh;
 }
 </style>
