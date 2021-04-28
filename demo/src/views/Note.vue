@@ -1,123 +1,120 @@
 <template>
-  <el-scrollbar>
+  <el-container>
+    <el-header height="5vh">
+      <Menu />
+    </el-header>
     <el-container>
-      <el-header height="40px">
-        <Menu />
-      </el-header>
-      <el-container>
-        <el-aside>
-          <!-- 这里是订阅文件夹 -->
-          <el-scrollbar>
-            <el-menu>
-              <template
-                v-for="folder in state.notefolders"
-                :key="folder.folder_id"
+      <el-aside>
+        <!-- 这里是订阅文件夹 -->
+        <el-scrollbar
+          ><el-menu>
+            <template
+              v-for="folder in state.notefolders"
+              :key="folder.folder_id"
+            >
+              <el-menu-item
+                :index="String(folder.folder_id)"
+                @click="
+                  handleSelect(
+                    folder.folder_id,
+                    folder.folder_list,
+                    folder.folder
+                  )
+                "
               >
-                <el-menu-item
-                  :index="String(folder.folder_id)"
-                  @click="
-                    handleSelect(
-                      folder.folder_id,
-                      folder.folder_list,
-                      folder.folder
-                    )
-                  "
-                >
-                  <el-row :gutter="20">
-                    <el-col :span="20">{{ folder.folder }}</el-col>
-                    <el-col :span="4">{{ folder.folder_list.length }}</el-col>
-                  </el-row>
-                </el-menu-item>
-              </template>
-              <el-affix position="bottom" :offset="20">
-                <el-button
-                  type="primary"
-                  icon="el-icon-s-tools"
-                  circle
-                  @click="
-                    state.centerDialogVisible = !state.centerDialogVisible
-                  "
-                ></el-button>
-              </el-affix>
-              <!-- 笔记管理 -->
-              <el-dialog
-                title="管理笔记文件夹"
-                v-model="state.centerDialogVisible"
-                width="50%"
-                center
+                <el-row :gutter="20">
+                  <el-col :span="20">{{ folder.folder }}</el-col>
+                  <el-col :span="4">{{ folder.folder_list.length }}</el-col>
+                </el-row>
+              </el-menu-item>
+            </template>
+          </el-menu>
+          <el-affix position="bottom" :offset="20">
+            <el-button
+              type="primary"
+              icon="el-icon-folder"
+              circle
+              @click="state.centerDialogVisible = !state.centerDialogVisible"
+            ></el-button>
+          </el-affix>
+          <!-- 笔记管理 -->
+          <el-dialog
+            title="管理笔记文件夹"
+            v-model="state.centerDialogVisible"
+            width="50%"
+            center
+          >
+            <div>
+              <el-table
+                :data="
+                  state.notefolder.filter(
+                    (data) =>
+                      !state.search ||
+                      data.name
+                        .toLowerCase()
+                        .includes(state.search.toLowerCase())
+                  )
+                "
+                style="width: 100%"
               >
-                <div>
-                  <el-table
-                    :data="
-                      state.notefolder.filter(
-                        (data) =>
-                          !state.search ||
-                          data.name
-                            .toLowerCase()
-                            .includes(state.search.toLowerCase())
-                      )
-                    "
-                    style="width: 100%"
-                  >
-                    <el-table-column label="Name" prop="name">
-                    </el-table-column>
-                    <el-table-column label="Conut" prop="note_count">
-                    </el-table-column>
-                    <el-table-column align="right">
-                      <template #header>
-                        <el-row>
-                          <el-col :span="18" :offset="0"
-                            ><el-input
-                              v-model="state.search"
-                              size="mini"
-                              placeholder="输入关键字搜索"
-                            />
-                          </el-col>
-                          <el-col :span="6" :offset="0"
-                            ><el-button
-                              size="mini"
-                              round
-                              type="primary"
-                              icon="el-icon-folder-add"
-                              @click="addfolderopen"
-                            ></el-button
-                          ></el-col>
-                        </el-row>
-                      </template>
-                      <template #default="scope">
-                        <el-button
+                <el-table-column label="Name" prop="name"> </el-table-column>
+                <el-table-column label="Conut" prop="note_count">
+                </el-table-column>
+                <el-table-column align="right">
+                  <template #header>
+                    <el-row>
+                      <el-col :span="18" :offset="0"
+                        ><el-input
+                          v-model="state.search"
                           size="mini"
-                          @click="handleEdit(scope.$index, scope.row)"
-                          >Edit</el-button
-                        >
-                        <el-button
+                          placeholder="输入关键字搜索"
+                        />
+                      </el-col>
+                      <el-col :span="6" :offset="0"
+                        ><el-button
                           size="mini"
-                          type="danger"
-                          @click="handleDelete(scope.$index, scope.row)"
-                          >Delete</el-button
-                        >
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button @click="state.centerDialogVisible = false"
-                      >取 消</el-button
+                          round
+                          type="primary"
+                          icon="el-icon-folder-add"
+                          @click="addfolderopen"
+                        ></el-button
+                      ></el-col>
+                    </el-row>
+                  </template>
+                  <template #default="scope">
+                    <el-button
+                      size="mini"
+                      @click="handleEdit(scope.$index, scope.row)"
+                      >Edit</el-button
                     >
                     <el-button
-                      type="primary"
-                      @click="state.centerDialogVisible = false"
-                      >确 定</el-button
+                      size="mini"
+                      type="danger"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >Delete</el-button
                     >
-                  </span>
-                </template>
-              </el-dialog>
-            </el-menu></el-scrollbar
-          >
-        </el-aside>
-        <el-main>
-          <!-- 这里是笔记 -->
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="state.centerDialogVisible = false"
+                  >取 消</el-button
+                >
+                <el-button
+                  type="primary"
+                  @click="state.centerDialogVisible = false"
+                  >确 定</el-button
+                >
+              </span>
+            </template>
+          </el-dialog></el-scrollbar
+        >
+      </el-aside>
+      <el-main>
+        <el-scrollbar
+          ><!-- 这里是笔记 -->
           <el-row>
             <el-col :span="12" :offset="2"
               ><h1>{{ state.currentfoldername }}</h1></el-col
@@ -189,32 +186,32 @@
             description="RSSIn"
             v-if="state.currentlist.length == 0"
             :image-size="240"
-          ></el-empty>
-        </el-main>
-      </el-container>
+          ></el-empty
+        ></el-scrollbar>
+      </el-main>
     </el-container>
-    <!-- 用来修改笔记的弹出框 -->
-    <el-dialog
-      title="修改笔记"
-      v-model="state.dialogVisible"
-      width="30%"
-      :before-close="handleClose"
+  </el-container>
+  <!-- 用来修改笔记的弹出框 -->
+  <el-dialog
+    title="修改笔记"
+    v-model="state.dialogVisible"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <el-input
+      type="textarea"
+      :rows="2"
+      placeholder="state.currentnote"
+      v-model="state.currentnote"
     >
-      <el-input
-        type="textarea"
-        :rows="2"
-        placeholder="state.currentnote"
-        v-model="state.currentnote"
-      >
-      </el-input>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="state.dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="putnote">确 定</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </el-scrollbar>
+    </el-input>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="state.dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="putnote">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script>
 import { reactive, getCurrentInstance } from "vue";
@@ -460,14 +457,6 @@ export default {
 };
 </script>
 <style scoped>
-.text {
-  font-size: 14px;
-}
-
-.item {
-  margin-bottom: 18px;
-}
-
 .box-card {
   margin: 20px auto;
   width: 75%;
@@ -480,17 +469,11 @@ export default {
 .el-icon-arrow-down {
   font-size: 12px;
 }
-.demonstration {
-  display: block;
-  color: #8492a6;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-.el-header {
-  background-color: #f6f7f8;
-}
 .el-menu {
-  height: 100vh;
+  background-color: #f6f7f8;
+  height: 95vh;
+}
+.el-affix {
   background-color: #f6f7f8;
 }
 .el-menu-item {
