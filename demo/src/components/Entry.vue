@@ -119,7 +119,7 @@
         </el-row>
         <div v-show="state.noteinput[index]" class="edit-area">
           <el-row :gutter="20">
-            <el-col :span="12" offset="2">
+            <el-col :span="12" :offset="2">
               <el-input
                 type="textarea"
                 placeholder="记点东西吧！"
@@ -127,7 +127,7 @@
                 v-model="state.note[index]"
               ></el-input>
             </el-col>
-            <el-col :span="9" offset="1" class="btngroup">
+            <el-col :span="9" :offset="1" class="btngroup">
               <el-col :span="15" :offset="0">
                 <el-select
                   v-model="state.notefoldid"
