@@ -42,7 +42,7 @@
     <el-col :span="4" :offset="1" class="option">
       <el-select
         v-model="state.value"
-        placeholder="Move To ..."
+        :placeholder="state.placeholder"
         @change="changeFold"
         v-show="state.feed_info.id > 0"
         size="mini"
@@ -196,11 +196,18 @@ export default {
       note_fold: [],
       notefoldid: "",
       search: "",
+      placeholder: "",
     });
+    console.log(props.selectFeed.folder_id);
     watch(
       () => props.selectFeed.feed_id,
       (newFeedId) => {
         getEntries(newFeedId, props.selectFeed.folder_id);
+        if (props.selectFeed.folder_id > 0) {
+          state.placeholder = "移动到···";
+        } else {
+          state.placeholder = "订阅到···";
+        }
       }
     );
     // 渲染选择文件夹
