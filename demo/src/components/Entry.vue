@@ -415,7 +415,8 @@ export default {
 .btngroup {
   margin: auto;
 }
-.entry-content {
+.entry-content /deep/ img {
+  max-width: 100%;
 }
 .edit.is-active,
 .edit:active {
