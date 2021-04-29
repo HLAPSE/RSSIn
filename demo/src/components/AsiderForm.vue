@@ -6,8 +6,8 @@
         <template #title>
           <span>🏠 ALL</span>
         </template>
-        <el-menu-item index="-1">All</el-menu-item>
-        <el-menu-item index="-2">Unread</el-menu-item>
+        <el-menu-item index="0-1">All</el-menu-item>
+        <el-menu-item index="0-2">Unread</el-menu-item>
       </el-submenu>
       <!-- 这里开始是各个文件夹 -->
       <template v-for="folder in state.folders" :key="folder.folder_id">
@@ -137,7 +137,7 @@ export default {
     const { ctx } = getCurrentInstance();
     const handleSelect = (keyPath, key) => {
       context.emit("feedInfo", {
-        folder_id: parseInt(key),
+        folder_id: parseInt(key[0]),
         // 这里将子菜单index做分割，获取订阅的id
         feed_id: parseInt(keyPath.substring(key[0].length)),
       });
