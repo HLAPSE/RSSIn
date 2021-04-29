@@ -1,3 +1,4 @@
+import datetime
 from app.models.model import Feed, Read, db
 from flask import jsonify
 from flask_jwt_extended import current_user, jwt_required
@@ -51,7 +52,8 @@ class Entries(Resource):
             entry_info["title"] = entry.title
             entry_info["link"] = entry.link
             entry_info["content"] = entry.content
-            entry_info["updateddate"] = entry.updateddate
+            entry_info["updateddate"] = datetime.datetime.strftime(
+                entry.updateddate, "%Y-%m-%d %H:%M:%S")
             entry_info["type"] = entry.feed.type
             entry_info["read"] = True if entry.id in read_list else False
             data.append(entry_info)
