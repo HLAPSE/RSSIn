@@ -103,13 +103,13 @@
           <el-col :span="4" class="btngroup">
             <el-button-group>
               <el-button
-                type="edit"
+                class="edit"
                 icon="el-icon-edit"
                 @click="state.noteinput[index] = !state.noteinput[index]"
                 size="small"
               ></el-button>
               <el-button
-                type="goon"
+                class="goon"
                 @click="readEntry(index, entry.read, entry.id)"
                 size="small"
                 >{{ state.display[index] ? "收起" : "展开" }}</el-button
@@ -198,7 +198,6 @@ export default {
       search: "",
       placeholder: "",
     });
-    console.log(props.selectFeed.folder_id);
     watch(
       () => props.selectFeed.feed_id,
       (newFeedId) => {
@@ -418,40 +417,40 @@ export default {
 }
 .entry-content {
 }
-.el-button--edit.is-active,
-.el-button--edit:active {
+.edit.is-active,
+.edit:active {
   background: #ff9966;
   border-color: #ff9966;
   color: #fff;
 }
 
-.el-button--edit:focus,
-.el-button--edit:hover {
+.edit:focus,
+.edit:hover {
   background: #ffcccc;
   border-color: #ffcccc;
   color: #fff;
 }
 
-.el-button--edit {
+.edit {
   color: #fff;
   background-color: #ff9966;
   border-color: #ff9966;
 }
-.el-button--goon.is-active,
-.el-button--goon:active {
+.goon.is-active,
+.goon:active {
   background: #20b2aa;
   border-color: #20b2aa;
   color: #fff;
 }
 
-.el-button--goon:focus,
-.el-button--goon:hover {
+.goon:focus,
+.goon:hover {
   background: #48d1cc;
   border-color: #48d1cc;
   color: #fff;
 }
 
-.el-button--goon {
+.goon {
   color: #fff;
   background-color: #20b2aa;
   border-color: #20b2aa;
