@@ -18,7 +18,9 @@
           </template>
           <!-- 文件夹订阅 -->
           <template v-for="feed in folder.folder_list" :key="feed.feed_id">
-            <el-menu-item :index="String(feed.feed_id)">
+            <el-menu-item
+              :index="String(folder.folder_id) + String(feed.feed_id)"
+            >
               <el-row :gutter="20">
                 <el-col :span="20">{{ feed.title }}</el-col>
                 <!-- 这里用于获取未读文章的个数 -->
@@ -37,9 +39,6 @@
         ></el-menu-item>
         <el-menu-item index="0-2"
           >再来一个推荐2<i class="el-icon-circle-plus-outline"></i
-        ></el-menu-item>
-        <el-menu-item index="0-0"
-          >点这里关闭推荐<i class="el-icon-delete-solid"></i
         ></el-menu-item>
       </el-submenu>
       <!-- 管理页面按钮 -->
@@ -139,7 +138,8 @@ export default {
     const handleSelect = (keyPath, key) => {
       context.emit("feedInfo", {
         folder_id: parseInt(key),
-        feed_id: parseInt(keyPath),
+        // 这里将子菜单index做分割，获取订阅的id
+        feed_id: parseInt(keyPath.substring(key[0].length)),
       });
     };
     let loading;
