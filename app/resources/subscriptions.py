@@ -27,8 +27,9 @@ class Subscriptions(Resource):
                 feed_info["feed_id"] = feed_id.feed.id
                 feed_info["title"] = feed_id.feed_alias
                 # 用于获取未读订阅个数待完成
-                feed_info['conut'] = len(
-                    feed_id.feed.entries) - read_list[feed_info["feed_id"]]
+                feed_info['conut'] = Entry.query.filter_by(
+                    feed_id=feed_info["feed_id"]).count() - read_list[
+                        feed_info["feed_id"]]
                 folder_list.append(feed_info)
                 folder_data["folder_list"] = folder_list
             # 修复小bug,前端需要这个列表来获取数量
