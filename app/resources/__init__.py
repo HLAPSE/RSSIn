@@ -19,6 +19,7 @@ from .notefolder import NoteFolders
 from .note import Notes
 from .info import Infos
 from .feed import Feeds
+from .recommendation import Recommendations
 
 api = Api()
 api.add_resource(HelloWorld, '/')
@@ -31,6 +32,7 @@ api.add_resource(NoteFolders, '/notefolders')
 api.add_resource(Notes, '/notes')
 api.add_resource(Infos, '/infos')
 api.add_resource(Feeds, '/feeds')
+api.add_resource(Recommendations, '/recommendations')
 
 
 def init_app(app):
