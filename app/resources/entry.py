@@ -55,6 +55,7 @@ class Entries(Resource):
             entry_info["type"] = entry.feed.type
             entry_info["read"] = True if entry.id in read_list else False
             data.append(entry_info)
+        data.sort(key=lambda x: x['updateddate'], reverse=True)
         return jsonify(data=data)
 
     @jwt_required()
