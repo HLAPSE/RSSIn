@@ -25,8 +25,11 @@ class Infos(Resource):
             if args['id'] > 0:
                 feed_info = FolderFeed.query.get(
                     (args["folder_id"], args["id"]))
-                alias = feed_info.feed_alias
                 feed = Feed.query.get(args["id"])
+                # 这里用于推荐获取订阅信息标题
+                alias = feed.title
+                if args["folder_id"] != -3:
+                    alias = feed_info.feed_alias
                 return jsonify(id=feed.id,
                                title=alias,
                                link=feed.link,
