@@ -34,12 +34,15 @@
         <template #title>
           <span>🎁 推荐</span>
         </template>
-        <el-menu-item index="0-1"
-          >假装这有个推荐1 <i class="el-icon-circle-plus-outline"></i
-        ></el-menu-item>
-        <el-menu-item index="0-2"
-          >再来一个推荐2<i class="el-icon-circle-plus-outline"></i
-        ></el-menu-item>
+        <template v-for="feed in state.recommendations" :key="feed.feed_id">
+          <el-menu-item :index="'-3' + String(feed.feed_id)">
+            <el-row :gutter="20">
+              <el-col :span="20">{{ feed.title }}</el-col>
+              <!-- 这里用于获取未读文章的个数 -->
+              <el-col :span="2">{{ feed.conut }}</el-col>
+            </el-row></el-menu-item
+          >
+        </template>
       </el-submenu>
       <!-- 管理页面按钮 -->
     </el-menu>
@@ -133,6 +136,7 @@ export default {
       options: [],
       centerDialogVisible: false,
       search: "",
+      recommendations: [],
     });
     const { ctx } = getCurrentInstance();
     const handleSelect = (keyPath, key) => {
@@ -268,8 +272,25 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    const getrecommendations = () => {
+      ctx.$axios
+        .get("/api/recommendations")
+        .then((res) => {
+          state.recommendations = res.data;
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     freshfolder();
-    return { state, handleSelect, addfolderopen, handleDelete, handleEdit };
+    getrecommendations();
+    return {
+      state,
+      handleSelect,
+      addfolderopen,
+      handleDelete,
+      handleEdit,
+    };
   },
 };
 </script>
