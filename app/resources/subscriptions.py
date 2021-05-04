@@ -13,10 +13,6 @@ class Subscriptions(Resource):
     @jwt_required()
     def get(self):
         data = []
-        read_list = Counter([
-            Entry.query.get(read.entry_id).feed_id
-            for read in Read.query.filter_by(user_id=current_user.id).all()
-        ])
         for folder in current_user.folders:
             folder_data = {}
             folder_data["folder"] = folder.name
@@ -26,10 +22,17 @@ class Subscriptions(Resource):
                 feed_info = {}
                 feed_info["feed_id"] = feed_id.feed.id
                 feed_info["title"] = feed_id.feed_alias
-                # 用于获取未读订阅个数待完成
-                feed_info['conut'] = Entry.query.filter_by(
-                    feed_id=feed_info["feed_id"]).count() - read_list[
-                        feed_info["feed_id"]]
+                # 用于获取未读订阅个数
+                # 需要先建立视图才能使用
+                entry_count_query = db.session.execute(
+                    f'SELECT entry_count FROM feed_entry_count WHERE feed_id={feed_info["feed_id"]}'
+                ).first()
+                read_count_query = db.session.execute(
+                    f'SELECT count FROM `feed_read_count` WHERE feed_id = {feed_info["feed_id"]} AND user_id ={current_user.id}'
+                ).first()
+                entry_count = entry_count_query[0] if entry_count_query else 0
+                read_count = read_count_query[0] if read_count_query else 0
+                feed_info['conut'] = entry_count - read_count
                 folder_list.append(feed_info)
                 folder_data["folder_list"] = folder_list
             # 修复小bug,前端需要这个列表来获取数量
