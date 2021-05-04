@@ -155,6 +155,7 @@ export default {
       };
       loading = ElLoading.service(options);
     };
+    startLoading();
     const endLoading = () => {
       loading.close();
     };
@@ -199,7 +200,6 @@ export default {
         });
     };
     const freshfolder = () => {
-      startLoading();
       ctx.$axios
         .get("/api/subscriptions")
         .then((res) => {
