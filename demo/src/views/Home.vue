@@ -10,7 +10,9 @@
           <AsiderForm ref="RefChilde" @feedInfo="feedInfoFun" />
         </el-aside>
         <el-main>
-          <el-scrollbar><Entry :selectFeed="selectFeed" /></el-scrollbar>
+          <el-scrollbar
+            ><Entry :selectFeed="selectFeed" @freshAside="freshAsideFun"
+          /></el-scrollbar>
         </el-main>
       </el-container> </el-container
   ></el-scrollbar>
@@ -34,6 +36,7 @@ export default defineComponent({
       selectFeed.folder_id = selectInfo.folder_id;
       selectFeed.feed_id = selectInfo.feed_id;
     };
+    // 调用子组件方法实现侧栏刷新
     const freshAsideFun = () => {
       RefChilde.value.freshfolder();
     };

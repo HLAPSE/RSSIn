@@ -173,10 +173,10 @@
 
 <script>
 // import {} from "@vue/composition-api";
-import { getCurrentInstance, watch, reactive } from "vue";
+import { getCurrentInstance, watch, reactive, defineComponent } from "vue";
 import { ElMessage } from "element-plus";
 
-export default {
+export default defineComponent({
   props: {
     selectFeed: {
       required: true,
@@ -242,6 +242,10 @@ export default {
           });
       }
     );
+    // 调用父组件方法实现侧栏刷新
+    const freshfolder = () => {
+      context.emit("freshAside");
+    };
     const getEntries = (newFeedId, foldId) => {
       ctx.$axios
         .get("/api/entries", {
@@ -294,6 +298,7 @@ export default {
             message: res.data.message,
             type: "success",
           });
+          freshfolder();
         })
         .catch((error) => {
           ElMessage.error(error.message);
@@ -368,7 +373,7 @@ export default {
       addNote,
     };
   },
-};
+});
 </script>
 <style scoped>
 #feed-title {
