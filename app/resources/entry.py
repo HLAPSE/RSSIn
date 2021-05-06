@@ -53,7 +53,7 @@ class Entries(Resource):
             entry_info["link"] = entry.link
             entry_info["content"] = entry.content
             entry_info["updateddate"] = datetime.datetime.strftime(
-                entry.updateddate, "%Y-%m-%d %H:%M:%S")
+                entry.publisheddate, "%Y-%m-%d %H:%M:%S")
             entry_info["type"] = entry.feed.type
             entry_info["read"] = True if entry.id in read_list else False
             data.append(entry_info)
