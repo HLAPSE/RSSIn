@@ -125,10 +125,11 @@
   >
 </template>
 <script>
-import { getCurrentInstance } from "vue";
-import { reactive } from "vue";
+import { getCurrentInstance, defineComponent } from "vue";
+import { reactive, onBeforeMount } from "vue";
 import { ElMessage, ElLoading } from "element-plus";
-export default {
+export default defineComponent({
+  name: "AsiderForm",
   props: {},
   setup(props, context) {
     const state = reactive({
@@ -155,7 +156,6 @@ export default {
       };
       loading = ElLoading.service(options);
     };
-    startLoading();
     const endLoading = () => {
       loading.close();
     };
@@ -209,6 +209,7 @@ export default {
         .catch((error) => {
           ElMessage.error(error.message);
         });
+      getrecommendations();
     };
     const handleDelete = (index, row) => {
       if (row.folder_list.length) {
@@ -282,17 +283,18 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    startLoading();
     freshfolder();
-    getrecommendations();
     return {
       state,
       handleSelect,
       addfolderopen,
       handleDelete,
       handleEdit,
+      freshfolder,
     };
   },
-};
+});
 </script>
 
 <style scoped>

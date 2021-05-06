@@ -7,7 +7,7 @@
       <el-container>
         <el-aside class="asi">
           <!-- 这里是订阅文件夹 -->
-          <AsiderForm @feedInfo="feedInfoFun" />
+          <AsiderForm ref="RefChilde" @feedInfo="feedInfoFun" />
         </el-aside>
         <el-main>
           <el-scrollbar><Entry :selectFeed="selectFeed" /></el-scrollbar>
@@ -20,13 +20,13 @@
 // @ is an alias to /src
 import AsiderForm from "@/components/AsiderForm";
 import Entry from "@/components/Entry";
-import { reactive } from "vue";
+import { reactive, ref, defineComponent } from "vue";
 import Menu from "@/components/Menu";
-export default {
+export default defineComponent({
   name: "Home",
   components: { AsiderForm, Entry, Menu },
   setup() {
-    const state = reactive({});
+    const RefChilde = ref();
     const isCollapse = false;
     const selectFeed = reactive({ folder_id: 0, feed_id: -10 });
     // 获取所选的文件夹
@@ -34,9 +34,18 @@ export default {
       selectFeed.folder_id = selectInfo.folder_id;
       selectFeed.feed_id = selectInfo.feed_id;
     };
-    return { isCollapse, feedInfoFun, selectFeed, state };
+    const freshAsideFun = () => {
+      RefChilde.value.freshfolder();
+    };
+    return {
+      isCollapse,
+      feedInfoFun,
+      selectFeed,
+      RefChilde,
+      freshAsideFun,
+    };
   },
-};
+});
 </script>
 <style scoped>
 .el-container > .el-container {
