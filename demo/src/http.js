@@ -1,20 +1,6 @@
 import axios from "axios";
 import router from "./router";
-import { ElLoading } from "element-plus";
-let loading;
-
-const startLoading = () => {
-  const options = {
-    lock: true,
-    text: "loading...",
-    background: "rgba(0,0,0,0.7)",
-  };
-  loading = ElLoading.service(options);
-};
-
-const endLoading = () => {
-  loading.close();
-};
+import { ElLoading } from 'element-plus';
 
 // 请求拦截
 axios.interceptors.request.use((config) => {
@@ -28,22 +14,24 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-            switch (error.response.status) {
-              case 401:
-                // 返回 401 清除token信息并跳转到登录页面
-                localStorage.clear()
-                router.replace({
+      let loadingInstance = ElLoading.service();
+      loadingInstance.close();
+      switch (error.response.status) {
+        case 401:
+          // 返回 401 清除token信息并跳转到登录页面
+          localStorage.clear()
+          router.replace({
+            path: 'login',
+            query: { redirect: router.currentRoute.fullPath }
+          });
+        case 500:
+          localStorage.clear()
+              router.replace({
                   path: 'login',
-                  query: { redirect: router.currentRoute.fullPath }
-                });
-              case 500:
-                localStorage.clear()
-                    router.replace({
-                        path: 'login',
-                        query: {redirect: router.currentRoute.fullPath}
-                    })
-            }
-        }
+                  query: {redirect: router.currentRoute.fullPath}
+              })
+      }
+    }
     return Promise.reject(error);
   }
 );
