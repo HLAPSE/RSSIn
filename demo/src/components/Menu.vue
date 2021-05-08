@@ -160,6 +160,7 @@
         <span class="dialog-footer">
           <el-button @click="resetForm">取 消</el-button>
           <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button type="danger" @click="logout">注 销</el-button>
         </span></el-form-item
       >
     </el-form>
@@ -295,6 +296,10 @@ export default {
           ElMessage.error(error.message);
         });
     };
+    const logout = () => {
+      localStorage.clear();
+      ctx.$router.push("/login");
+    };
     getuserinfo();
     getfolderinfo();
     return {
@@ -307,6 +312,7 @@ export default {
       getfeed,
       feedadd,
       feedinfo,
+      logout,
     };
   },
 };
