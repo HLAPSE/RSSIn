@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "./router";
 import { ElLoading } from "element-plus";
 let loading;
 
@@ -26,6 +27,23 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response) {
+            switch (error.response.status) {
+              case 401:
+                // 返回 401 清除token信息并跳转到登录页面
+                localStorage.clear()
+                router.replace({
+                  path: 'login',
+                  query: { redirect: router.currentRoute.fullPath }
+                });
+              case 500:
+                localStorage.clear()
+                    router.replace({
+                        path: 'login',
+                        query: {redirect: router.currentRoute.fullPath}
+                    })
+            }
+        }
     return Promise.reject(error);
   }
 );
