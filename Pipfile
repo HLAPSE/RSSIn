@@ -14,6 +14,8 @@ gevent = "==21.1.2"
 gunicorn = "==20.0.4"
 pymysql = "==1.0.2"
 flask-apscheduler = "==1.11.0"
+html2text = "*"
+jieba = "*"
 
 [dev-packages]
 
