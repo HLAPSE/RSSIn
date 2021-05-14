@@ -2,11 +2,12 @@ from app.common.util import formatDatetime
 from app.models.model import Entry, Feed, db
 from feedparser import parse as feed_parse
 from flask_apscheduler import APScheduler
+from app.common.util import get_tags
 
 scheduler = APScheduler()
 
 
-@scheduler.task('interval', id='title', minutes=5, misfire_grace_time=900)
+@scheduler.task('interval', id='title', minutes=10, misfire_grace_time=900)
 def fresh_feed_info():
 
     feed_list = [feed for feed in Feed.query.all()]
@@ -15,6 +16,18 @@ def fresh_feed_info():
         if title != feed.title:
             feed.title = title
             db.session.commit()
+
+
+@scheduler.task('interval', id='tags', minutes=1, misfire_grace_time=900)
+def fresh_tags():
+    # 过滤掉RSShub生成的内容
+    feed_list = [
+        feed
+        for feed in Feed.query.filter(Feed.subtitle.notlike("%RSSHub%")).all()
+    ]
+    for feed in feed_list:
+        feed.tag = get_tags(feed)
+        db.session.commit()
 
 
 @scheduler.task('interval', id='fresh_entry', minutes=5)

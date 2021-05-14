@@ -1,8 +1,8 @@
+from app.models.model import Entry, Feed, FolderFeed, User, db
 from app.resources import feed, folder
 from flask import jsonify, make_response
 from flask_jwt_extended import create_access_token, current_user, jwt_required
 from flask_restful import Resource, reqparse
-from app.models.model import Entry, FolderFeed, User, db, Feed
 
 
 class Recommendations(Resource):
