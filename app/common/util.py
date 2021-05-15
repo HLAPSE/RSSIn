@@ -9,7 +9,7 @@ def tags(content):
 
 
 def getcontent(html):
-    soup = BeautifulSoup(html, 'html5lib')
+    soup = BeautifulSoup(html, 'html.parser')
     return soup.get_text()
 
 

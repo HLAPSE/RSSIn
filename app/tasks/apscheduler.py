@@ -18,7 +18,7 @@ def fresh_feed_info():
             db.session.commit()
 
 
-@scheduler.task('interval', id='tags', minutes=1, misfire_grace_time=900)
+@scheduler.task('interval', id='tags', minutes=10, misfire_grace_time=900)
 def fresh_tags():
     # 过滤掉RSShub生成的内容
     feed_list = [
