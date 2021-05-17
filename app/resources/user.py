@@ -24,16 +24,16 @@ class Users(Resource):
                             type=str,
                             required=True,
                             help='email cannot be blank!')
-        parser.add_argument('passwd',
+        parser.add_argument('password',
                             type=str,
                             required=True,
-                            help='passwd cannot be blank!')
+                            help='password cannot be blank!')
         args = parser.parse_args()
         user = User.query.filter_by(email=args['email']).one_or_none()
         if user == None:
             new_user = User(name=args['name'],
                             email=args['email'],
-                            passwd=args['passwd'])
+                            passwd=args['password'])
             db.session.add(new_user)
             db.session.commit()
             user = User.query.filter_by(email=args['email']).first()

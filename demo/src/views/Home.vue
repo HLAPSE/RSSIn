@@ -29,7 +29,6 @@ export default defineComponent({
   components: { AsiderForm, Entry, Menu },
   setup() {
     const RefChilde = ref();
-    const isCollapse = false;
     const selectFeed = reactive({ folder_id: 0, feed_id: -10 });
     // 获取所选的文件夹
     const feedInfoFun = (selectInfo) => {
@@ -41,7 +40,6 @@ export default defineComponent({
       RefChilde.value.freshfolder();
     };
     return {
-      isCollapse,
       feedInfoFun,
       selectFeed,
       RefChilde,
