@@ -6,8 +6,8 @@
         <template #title>
           <span>🏠 ALL</span>
         </template>
-        <el-menu-item index="0-1">All</el-menu-item>
-        <el-menu-item index="0-2">Unread</el-menu-item>
+        <el-menu-item index="0-1">所有</el-menu-item>
+        <el-menu-item index="0-2">未读</el-menu-item>
       </el-submenu>
       <!-- 这里开始是各个文件夹 -->
       <template v-for="folder in state.folders" :key="folder.folder_id">
@@ -134,7 +134,6 @@ export default defineComponent({
   setup(props, context) {
     const state = reactive({
       folders: [],
-      options: [],
       centerDialogVisible: false,
       search: "",
       recommendations: [],
@@ -151,7 +150,7 @@ export default defineComponent({
     const startLoading = () => {
       const options = {
         lock: true,
-        text: "loading...",
+        text: "加载中...",
         background: "rgba(0,0,0,0.7)",
       };
       loading = ElLoading.service(options);
@@ -167,7 +166,7 @@ export default defineComponent({
         })
         .then(({ value }) => {
           if (value) {
-            addnotefold(value);
+            addfold(value);
           } else {
             ctx.$message({
               type: "info",
@@ -182,7 +181,7 @@ export default defineComponent({
           });
         });
     };
-    const addnotefold = (name) => {
+    const addfold = (name) => {
       ctx.$axios
         .post("/api/folders", {
           folder_name: name,

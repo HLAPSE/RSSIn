@@ -12,17 +12,17 @@
       >
         <el-input
           size="mini"
-          placeholder="Enter another alias"
+          placeholder="输入别名"
           v-model="state.alias"
           clearable
         >
         </el-input>
         <div style="text-align: right; margin: 0">
           <el-button size="mini" type="text" @click="state.visible = false"
-            >cancel</el-button
+            >取消</el-button
           >
           <el-button type="primary" size="mini" @click="changeAlias"
-            >confirm</el-button
+            >确定</el-button
           >
         </div>
         <template #reference>
@@ -110,7 +110,7 @@
               ></el-button>
               <el-button
                 class="goon"
-                @click="readEntry(index, entry.read, entry.id)"
+                @click="readEntry(index, entry.read, entry.id, entry)"
                 size="small"
                 >{{ state.display[index] ? "收起" : "展开" }}</el-button
               >
@@ -131,7 +131,7 @@
               <el-col :span="15" :offset="0">
                 <el-select
                   v-model="state.notefoldid"
-                  placeholder="选择标签"
+                  placeholder="选择笔记分类"
                   size="small"
                 >
                   <el-option
@@ -193,7 +193,6 @@ export default defineComponent({
       // 编辑订阅名称
       visible: false,
       alias: "",
-      note_fold: [],
       notefoldid: "",
       search: "",
       placeholder: "",
@@ -329,15 +328,18 @@ export default defineComponent({
           .post("/api/entries", {
             entry_id: info.id,
           })
+          .then((res) => {
+            info.entry.read = true;
+          })
           .catch((error) => {
             ElMessage.error(error.message);
           });
       }
     };
-    const readEntry = (index, read, id) => {
+    const readEntry = (index, read, id, entry) => {
       state.display[index] = !state.display[index];
       if (state.display[index] && !read) {
-        setTimeout(addrecord, 3000, { index: index, id: id });
+        setTimeout(addrecord, 3000, { index: index, id: id, entry: entry });
       }
     };
     // 这里获取选中文本，以后可能就不用这个功能了
