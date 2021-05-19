@@ -6,23 +6,23 @@
     label-width="100px"
     class="sign-in-form"
   >
-    <el-form-item label="Email" prop="email">
+    <el-form-item label="邮箱" prop="email">
       <el-input
         v-model="userInfo.email"
         type="email"
-        placeholder="Enter your email"
+        placeholder="输入邮箱登录···"
       ></el-input>
     </el-form-item>
-    <el-form-item label="Password" prop="password">
+    <el-form-item label="密码" prop="password">
       <el-input
         v-model="userInfo.password"
         type="password"
-        placeholder="Enter your passward"
+        placeholder="输入密码···"
       ></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('LoginForm')"
-        >Login</el-button
+        >登录</el-button
       >
     </el-form-item>
   </el-form>

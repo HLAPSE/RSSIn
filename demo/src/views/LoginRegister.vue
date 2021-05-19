@@ -16,7 +16,7 @@
             when you do, nothing will ever compare.
           </p>
           <button class="btn transparent" @click="signUpMode = !signUpMode">
-            signup
+            注册
           </button>
         </div>
         <img src="@/assets/login.svg" class="image" alt="" />
@@ -26,7 +26,7 @@
           <h3>Serendipity</h3>
           <p>斯人若彩虹 遇上方知有</p>
           <button class="btn transparent" @click="signUpMode = !signUpMode">
-            Login
+            登录
           </button>
         </div>
         <img src="@/assets/register.svg" class="image" alt="" />

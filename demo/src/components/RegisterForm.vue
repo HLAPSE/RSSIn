@@ -6,29 +6,29 @@
     label-width="100px"
     class="sign-up-form"
   >
-    <el-form-item label="name" prop="name">
+    <el-form-item label="用户名" prop="name">
       <el-input
         v-model="RegisterInfo.name"
-        placeholder="Enter your name"
+        placeholder="输入名称···"
       ></el-input>
     </el-form-item>
-    <el-form-item label="Email" prop="email">
+    <el-form-item label="邮箱" prop="email">
       <el-input
         v-model="RegisterInfo.email"
         type="email"
-        placeholder="Enter your email"
+        placeholder="输入邮箱"
       ></el-input>
     </el-form-item>
-    <el-form-item label="Password" prop="password">
+    <el-form-item label="密码" prop="password">
       <el-input
         v-model="RegisterInfo.password"
         type="password"
-        placeholder="Enter your passward"
+        placeholder="输入密码···"
       ></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitRegisterForm('RegisterForm')"
-        >SignUp</el-button
+        >注册</el-button
       >
     </el-form-item>
   </el-form>
