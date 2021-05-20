@@ -1,7 +1,7 @@
 <template>
-  <div class="demo-image">
-    <el-image :src="require('@/assets/404.png')" fit="scale-down"></el-image>
-  </div>
+  <el-scrollbar
+    ><el-image :src="require('@/assets/404.png')" fit="scale-down"></el-image
+  ></el-scrollbar>
 </template>
 
 <script>
@@ -12,7 +12,10 @@ export default {
 </script>
 
 <style scoped>
-el-image {
-  width: 100%;
+.el-image {
+  height: 50%;
+}
+html {
+  height: 100vh;
 }
 </style>
