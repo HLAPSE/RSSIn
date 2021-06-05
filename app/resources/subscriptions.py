@@ -102,6 +102,8 @@ class Subscriptions(Resource):
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))
         if args["folder_id_dst"]:
+            if not feed_info:
+                return jsonify({'message': 'success!'})
             feed_info.folder = Folder.query.get(args["folder_id_dst"])
         if args["feed_alias"]:
             feed_info.feed_alias = args["feed_alias"]
