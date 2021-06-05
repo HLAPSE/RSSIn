@@ -14,23 +14,40 @@ def get_similarity(set1, set2):
 # 构建群体
 def get_threeuser(res):
     similarity = {}
-    tmp = []
-    if len(res) < 3:
-        tmp = res
-    else:
-        tmp = [(user_id, value) for (user_id, value) in res[:3]]
+    tmp = res[:3]
     for (user_id, value) in tmp:
         similarity[user_id] = value
     return similarity
+
+
+def get_feed_user(user_feed, item):
+    feed_user = {}
+    for feed_id in item:
+        for (user_id, feeds) in user_feed.items():
+            if feed_id in feeds:
+                if feed_id in feed_user:
+                    feed_user[feed_id].append(user_id)
+                else:
+                    feed_user[feed_id] = [user_id]
+    return feed_user
+
+
+def get_feed_similarity(feed_user, user_similarity):
+    feed_similarity = {}
+    for (feed_id, user_list) in feed_user.items():
+        feed_similarity[feed_id] = sum(
+            [user_similarity[user] for user in user_list])
+    return sorted(feed_similarity.items(), key=lambda x: x[1],
+                  reverse=True)[:3]
 
 
 class Recommendations(Resource):
     @jwt_required()
     def get(self):
         # 用户已订阅的
-        subscriptions = set(feeds_info.feed for folder in current_user.folders
-                            for feeds_info in folder.feeds)
-        unsubscriptions = set(Feed.query.all()) - subscriptions
+        # subscriptions = set(feeds_info.feed for folder in current_user.folders
+        #                     for feeds_info in folder.feeds)
+        # unsubscriptions = set(Feed.query.all()) - subscriptions
         # 假设这个未订阅的就是基于推荐算法得出的
         users = set(user for user in User.query.all())
         user_feed = {}
@@ -49,6 +66,11 @@ class Recommendations(Resource):
         for user_id in group.keys():
             all_feed = set.union(all_feed, user_feed[user_id])
         item = all_feed - user_feed[current_user.id]  #当前用户未订阅的
+        feed_user = get_feed_user(user_feed, item)  #构建订阅与用户之间的关系
+        sorted_similarity = get_feed_similarity(feed_user, similarity)  #排序喜好程度
+        unsubscriptions = [
+            Feed.query.get(item[0]) for item in sorted_similarity
+        ]  #推荐加排序查询
         folder_list = []
         for feed in unsubscriptions:
             feed_info = {}
