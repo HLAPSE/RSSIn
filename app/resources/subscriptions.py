@@ -101,7 +101,6 @@ class Subscriptions(Resource):
                             help='alias cannot be blank!')
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))
-        print(args["folder_id"], args["feed_id"], args["folder_id_dst"])
         if args["folder_id"] < 0:
             folder = Folder.query.get(args["folder_id_dst"])
             feed = Feed.query.get(args["feed_id"])

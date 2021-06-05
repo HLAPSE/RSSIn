@@ -28,7 +28,7 @@ class Infos(Resource):
                 feed = Feed.query.get(args["id"])
                 # 这里用于推荐获取订阅信息标题
                 alias = feed.title
-                if args["folder_id"] != -3:
+                if args["folder_id"] != -3 and feed_info:
                     alias = feed_info.feed_alias
                 return jsonify(id=feed.id,
                                title=alias,

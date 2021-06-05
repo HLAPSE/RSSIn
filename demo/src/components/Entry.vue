@@ -297,6 +297,9 @@ export default defineComponent({
             message: res.data.message,
             type: "success",
           });
+          getEntries(props.selectFeed.feed_id, state.value);
+          props.selectFeed.folder_id = parseInt(state.value);
+          state.value = "";
           freshfolder();
         })
         .catch((error) => {
