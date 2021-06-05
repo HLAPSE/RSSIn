@@ -90,7 +90,7 @@ class Subscriptions(Resource):
                             required=True,
                             help='feed_id cannot be blank!')
         parser.add_argument('folder_id',
-                            type=str,
+                            type=int,
                             required=True,
                             help='folder_id cannot be blank!')
         parser.add_argument('feed_alias',
@@ -101,6 +101,16 @@ class Subscriptions(Resource):
                             help='alias cannot be blank!')
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))
+        print(args["folder_id"], args["feed_id"], args["folder_id_dst"])
+        if args["folder_id"] < 0:
+            folder = Folder.query.get(args["folder_id_dst"])
+            feed = Feed.query.get(args["feed_id"])
+            feed_info = FolderFeed(feed_alias=feed.title)
+            feed_info.folder = folder
+            feed_info.feed = feed
+            db.session.add(feed_info)
+            db.session.commit()
+            return jsonify({'message': 'success!'})
         if args["folder_id_dst"]:
             if not feed_info:
                 return jsonify({'message': 'success!'})
