@@ -68,11 +68,11 @@ class Recommendations(Resource):
         item = all_feed - user_feed[current_user.id]  #当前用户未订阅的
         feed_user = get_feed_user(user_feed, item)  #构建订阅与用户之间的关系
         sorted_similarity = get_feed_similarity(feed_user, similarity)  #排序喜好程度
-        unsubscriptions = [
+        recommendations = [
             Feed.query.get(item[0]) for item in sorted_similarity
         ]  #推荐加排序查询
         folder_list = []
-        for feed in unsubscriptions:
+        for feed in recommendations:
             feed_info = {}
             feed_info["feed_id"] = feed.id
             feed_info["title"] = feed.title

@@ -37,8 +37,11 @@ def fresh_entry():
     # 订阅源更新，若文章更新则刷新，而后更新订阅源日期
     feed_list = [feed for feed in Feed.query.all()]
     for feed in feed_list:
-        feed_updated = formatDatetime(
-            feed_parse(feed.feedURL).feed.updated_parsed)
+        try:
+            feed_updated = formatDatetime(
+                feed_parse(feed.feedURL).feed.updated_parsed)
+        except:
+            continue
         if str(feed.updateddate) != feed_updated:
             entries = feed_parse(feed.feedURL).entries
             for entry in entries:
