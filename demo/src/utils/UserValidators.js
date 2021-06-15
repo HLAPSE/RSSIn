@@ -3,6 +3,11 @@ export const userInfo = ref({
   email: "",
   password: "",
 });
+export const RegisterInfo = ref({
+  name: "",
+  email: "",
+  password: "",
+});
 export const rules = ref({
   name: [
     {
@@ -30,10 +35,4 @@ export const rules = ref({
       trigger: "blur",
     },
   ],
-});
-
-export const RegisterInfo = ref({
-  name: "",
-  email: "",
-  password: "",
 });

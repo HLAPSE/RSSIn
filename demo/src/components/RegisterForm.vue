@@ -34,30 +34,56 @@
   </el-form>
 </template>
 <script>
-import { getCurrentInstance } from "vue";
-
+import { getCurrentInstance, reactive } from "vue";
+import { ElMessage } from "element-plus";
 export default {
   props: {
-    RegisterInfo: {
-      required: true,
-    },
     rules: {
       required: true,
     },
   },
   setup() {
     const { ctx } = getCurrentInstance();
+    const RegisterInfo = reactive({
+      name: "",
+      email: "",
+      password: "",
+    });
+    const register = (name, email, password) => {
+      ctx.$axios
+        .post("/api/users", {
+          name: name,
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          const { access_token, message } = res.data;
+          ElMessage.success({
+            message: message,
+            type: "success",
+          });
+          localStorage.setItem("Token", "Bearer " + access_token);
+          ctx.$router.push("/");
+        })
+        .catch((error) => {
+          ElMessage.error(error.response.data.message);
+        });
+    };
     const submitRegisterForm = (formName) => {
       ctx.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          register(
+            RegisterInfo.name,
+            RegisterInfo.email,
+            RegisterInfo.password
+          );
         } else {
-          console.log("error submit!!");
+          console.log("提交错误!!");
           return false;
         }
       });
     };
-    return { submitRegisterForm };
+    return { submitRegisterForm, RegisterInfo };
   },
 };
 </script>

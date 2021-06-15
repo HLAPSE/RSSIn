@@ -45,7 +45,7 @@ class Users(Resource):
                 }), 201)
         else:
             return make_response(jsonify({'message': 'Email has existed '}),
-                                 200)
+                                 400)
 
     @jwt_required()
     def put(self):
