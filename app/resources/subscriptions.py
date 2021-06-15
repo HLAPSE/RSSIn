@@ -127,9 +127,9 @@ class Subscriptions(Resource):
                             required=True,
                             help='feed_id cannot be blank!')
         parser.add_argument('folder_id',
-                            type=str,
+                            type=int,
                             required=True,
-                            help='folder cannot be blank!')
+                            help='folder_id cannot be blank!')
         args = parser.parse_args()
         feed_info = FolderFeed.query.get((args["folder_id"], args["feed_id"]))
         if feed_info:

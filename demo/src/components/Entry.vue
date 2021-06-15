@@ -39,7 +39,7 @@
       </el-popover>
       <h6 id="feed-subtitle">{{ state.feed_info.sub_title }}</h6>
     </el-col>
-    <el-col :span="4" :offset="1" class="option">
+    <el-col :span="4" :offset="0" class="option">
       <el-select
         v-model="state.value"
         :placeholder="state.placeholder"
@@ -57,13 +57,23 @@
         </el-option>
       </el-select>
     </el-col>
-    <el-col :span="4" :offset="0" class="option"
-      ><el-input
+    <el-col :span="4" :offset="0" class="option">
+      <el-input
         v-model="state.search"
         size="mini"
         placeholder="输入关键字搜索"
         v-if="selectFeed.folder_id"
     /></el-col>
+    <el-col :span="1" :offset="0" class="option" style="margin-left: 1em"
+      ><el-button
+        type="danger"
+        icon="el-icon-delete"
+        size="mini"
+        circle
+        v-if="selectFeed.folder_id"
+        @click="deletefeed"
+      ></el-button
+    ></el-col>
   </el-row>
   <template
     v-for="(entry, index) in state.lists.filter(
@@ -369,6 +379,26 @@ export default defineComponent({
           ElMessage.error(error.message);
         });
     };
+    const deletefeed = (entry_id, index) => {
+      // 删除订阅
+      ctx.$axios
+        .delete("/api/subscriptions", {
+          params: {
+            feed_id: props.selectFeed.feed_id,
+            folder_id: props.selectFeed.folder_id,
+          },
+        })
+        .then((res) => {
+          ElMessage.success({
+            message: res.data.message,
+            type: "success",
+          });
+          freshfolder();
+        })
+        .catch((error) => {
+          ElMessage.error(error.message);
+        });
+    };
     return {
       state,
       changeFold,
@@ -376,6 +406,7 @@ export default defineComponent({
       readEntry,
       handleMouseSelect,
       addNote,
+      deletefeed,
     };
   },
 });
