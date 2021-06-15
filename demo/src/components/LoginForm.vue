@@ -45,6 +45,7 @@ export default {
     const submitForm = () => {
       LoginForm.value.validate((valid) => {
         if (valid) {
+          console.log("dgffdsg");
           ctx.$axios
             .post("/api/login", props.userInfo)
             .then((res) => {
