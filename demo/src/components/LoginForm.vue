@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, ref } from "vue";
 import { ElMessage } from "element-plus";
 
 export default {
@@ -41,8 +41,9 @@ export default {
   },
   setup(props) {
     const { ctx } = getCurrentInstance();
+    const LoginForm = ref();
     const submitForm = () => {
-      ctx.$refs["LoginForm"].validate((valid) => {
+      LoginForm.value.validate((valid) => {
         if (valid) {
           ctx.$axios
             .post("/api/login", props.userInfo)
@@ -59,7 +60,7 @@ export default {
         }
       });
     };
-    return { submitForm };
+    return { submitForm, LoginForm };
   },
 };
 </script>
