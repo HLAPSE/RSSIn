@@ -70,7 +70,7 @@
         icon="el-icon-delete"
         size="mini"
         circle
-        v-if="selectFeed.folder_id"
+        v-if="selectFeed.folder_id > 0"
         @click="deletefeed"
       ></el-button
     ></el-col>

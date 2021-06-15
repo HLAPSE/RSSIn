@@ -21,9 +21,7 @@
       ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('LoginForm')"
-        >登录</el-button
-      >
+      <el-button type="primary" @click="submitForm">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -43,8 +41,8 @@ export default {
   },
   setup(props) {
     const { ctx } = getCurrentInstance();
-    const submitForm = (formName) => {
-      ctx.$refs[formName].validate((valid) => {
+    const submitForm = () => {
+      ctx.$refs["LoginForm"].validate((valid) => {
         if (valid) {
           ctx.$axios
             .post("/api/login", props.userInfo)
