@@ -12,7 +12,10 @@ def fresh_feed_info():
 
     feed_list = [feed for feed in Feed.query.all()]
     for feed in feed_list:
-        title = feed_parse(feed.feedURL).feed.title
+        try:
+            title = feed_parse(feed.feedURL).feed.title
+        except:
+            continue
         if title != feed.title:
             feed.title = title
             db.session.commit()
