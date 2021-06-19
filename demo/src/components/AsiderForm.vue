@@ -55,7 +55,7 @@
       ></el-button>
     </el-affix>
     <el-dialog
-      title="管理订阅分组"
+      title="管理订阅分类"
       v-model="state.centerDialogVisible"
       width="50%"
       center
@@ -71,7 +71,7 @@
           "
           style="width: 100%"
         >
-          <el-table-column label="分组" prop="folder"> </el-table-column>
+          <el-table-column label="分类" prop="folder"> </el-table-column>
           <el-table-column label="数量" prop="folder_list.length">
           </el-table-column>
           <el-table-column align="right">

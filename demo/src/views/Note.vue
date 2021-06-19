@@ -39,7 +39,7 @@
           </el-affix>
           <!-- 笔记管理 -->
           <el-dialog
-            title="管理笔记文件夹"
+            title="管理笔记分类"
             v-model="state.centerDialogVisible"
             width="50%"
             center
@@ -57,8 +57,8 @@
                 "
                 style="width: 100%"
               >
-                <el-table-column label="Name" prop="name"> </el-table-column>
-                <el-table-column label="Conut" prop="note_count">
+                <el-table-column label="分类" prop="name"> </el-table-column>
+                <el-table-column label="数量" prop="note_count">
                 </el-table-column>
                 <el-table-column align="right">
                   <template #header>
